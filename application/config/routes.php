@@ -55,3 +55,5 @@ $route['(:any)'] = 'pages/view/$1';      // 그 외 모든 요청은 Pages 컨�
 $route['default_controller'] = 'pages/view';  // 기본 페이지
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+$route['news/create'] = 'news/create';
+$route['news/(:any)'] = 'news/view/$1';
