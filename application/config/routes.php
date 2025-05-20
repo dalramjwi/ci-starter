@@ -49,11 +49,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
+$route['news/create'] = 'news/create';
 $route['default_controller'] = 'news/view/$1';
 $route['news'] = 'news';                  // news 는 뉴스 목록 페이지로 연결
 $route['(:any)'] = 'pages/view/$1';      // 그 외 모든 요청은 Pages 컨트롤러로
-$route['default_controller'] = 'pages/view';  // 기본 페이지
-$route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
-$route['news/create'] = 'news/create';
 $route['news/(:any)'] = 'news/view/$1';
+$route['translate_uri_dashes'] = FALSE;
+$route['404_override'] = '';
+$route['default_controller'] = 'pages/view';  // 기본 페이지
