@@ -44,4 +44,38 @@ class Main extends MY_Controller
         $this->load->view('main/view', $data);
         $this->load->view('templates/footer');
     }
+    public function edit ($post_id)
+    {
+        // 게시글 수정 폼
+        $data['title'] = '게시글 수정';
+        $data['post'] = $this->Posts_model->get_post($post_id);
+
+        // 뷰 로드
+        $this->load->view('templates/header', $data);
+        $this->load->view('main/edit', $data);
+        $this->load->view('templates/footer');
+    }
+    public function update($post_id)
+    {
+        // 게시글 수정 처리
+        $title = $this->input->post('title');
+        $content = $this->input->post('content');
+
+        $data = [
+            'title' => $title,
+            'content' => $content,
+            'updated_at' => date('Y-m-d H:i:s')
+        ];
+
+        $this->Posts_model->update_post($post_id, $data);
+
+        redirect('/main/view/' . $post_id);
+    }
+    public function delete($post_id)
+    {
+        // 게시글 삭제 처리
+        $this->Posts_model->delete_post($post_id);
+
+        redirect('/main');
+    }
 }
