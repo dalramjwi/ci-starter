@@ -16,18 +16,11 @@ class Main extends MY_Controller
 
     public function index()
     {
-        // GET, POST, COOKIE에서 넘어온 값 사용 예시
-        // $userName = isset($this->params['name']) ? $this->params['name'] : '익명';
-        
         // 게시글 불러오기
         $data['title'] = '계층형 게시판 테스트';
         $all_posts = $this->Posts_model->get_all(); // 정렬되지 않은 모든 게시글
         $data['posts'] = $this->build_post_tree($all_posts); // 계층 구조로 정렬
-        // $data['userName'] = $userName;
 
-        // JS, CSS 파일 등록 (필요할 경우)
-        // $this->css('board.css');
-        // $this->js('board.js');
 
         // 뷰 로드
         $this->load->view('templates/header', $data);
@@ -123,6 +116,25 @@ class Main extends MY_Controller
 
         return $tree;
     }
+    public function view_option()
+    {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $option = $input['view_option'] ?? 'total';
+
+        // 선택 옵션에 따라 게시글 조회
+        if ($option === 'base') {
+            $posts = $this->Posts_model->get_only_base(); // depth 0만 조회
+        } else {
+            $all_posts = $this->Posts_model->get_all(); // 전체
+            $posts = $this->build_post_tree($all_posts); // 계층 구조로 정리
+        }
+
+        // 뷰를 문자열로 렌더링해서 응답
+        $html = $this->load->view('main/post_list', ['posts' => $posts], true);
+
+        echo json_encode(['html' => $html]);
+    }
+
 
 
 }
