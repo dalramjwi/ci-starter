@@ -11,6 +11,7 @@ class MY_Controller extends CI_Controller
     {
 
         parent::__construct();
+        date_default_timezone_set('Asia/Seoul');
         # Parameter
         $this->params = $this->getParams();
         $this->cookies = $this->getCookies();
