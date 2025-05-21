@@ -1,5 +1,6 @@
 <html>
     <head>
+        <meta charset="UTF-8">
         <title>계층형 게시판 테스트</title>
     </head>
     <body>

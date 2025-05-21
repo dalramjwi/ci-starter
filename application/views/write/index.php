@@ -3,7 +3,7 @@
     <input type="text" name="title" required><br>
 
     <label>내용:</label>
-    <input type="content" name="content" required><br>
+    <textarea name="content" required></textarea><br>
 
     <button type="submit"><?php echo $write; ?></button>
 </form>
