@@ -39,6 +39,11 @@ class Login extends MY_Controller
             echo "아이디가 없습니다.";
         }
     }
-
+    public function logout()
+    {
+        $this->session->unset_userdata('user_id');
+        $this->session->sess_destroy();
+        redirect('/login');
+    }
 
 }
