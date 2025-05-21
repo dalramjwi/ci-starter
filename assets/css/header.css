@@ -84,3 +84,29 @@ header {
   font-size: 24px;
   margin-bottom: 20px;
 }
+.write_div {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin: 10px 10px;
+}
+.write_btn {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  text-align: center;
+  border-radius: 5px;
+  text-decoration: none;
+  z-index: 1000; /* 다른 요소 위에 표시되도록 */
+  cursor: pointer;
+}
+
+.write_btn a {
+  color: white;
+  text-decoration: none;
+  display: block;
+}
+
+.write_btn:hover {
+  background-color: #0056b3;
+}
