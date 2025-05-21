@@ -30,7 +30,18 @@ class Main extends MY_Controller
 
         // 뷰 로드
         $this->load->view('templates/header', $data);
-        $this->load->view('main', $data);
+        $this->load->view('main/index', $data);
+        $this->load->view('templates/footer');
+    }
+    public function view($post_id)
+    {
+        // 게시글 상세보기
+        $data['title'] = '게시글 상세보기';
+        $data['post'] = $this->Posts_model->get_post($post_id);
+
+        // 뷰 로드
+        $this->load->view('templates/header', $data);
+        $this->load->view('main/view', $data);
         $this->load->view('templates/footer');
     }
 }
