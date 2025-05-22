@@ -12,6 +12,7 @@ class Main extends MY_Controller
         
         // 게시판 관련 모델 로드
         $this->load->model('Posts_model');
+        $this->load->model('Comments_model');
     }
 
     public function index()
@@ -32,7 +33,7 @@ class Main extends MY_Controller
         // 게시글 상세보기
         $data['title'] = '게시글 상세보기';
         $data['post'] = $this->Posts_model->get_post($post_id);
-
+        $data['comments'] = $this->Comments_model->get_comments_by_post($post_id); // 댓글 조회
         // 뷰 로드
         $this->load->view('templates/header', $data);
         $this->load->view('main/view', $data);
@@ -72,6 +73,44 @@ class Main extends MY_Controller
 
         redirect('/main');
     }
+
+public function delete_comment($comment_id)
+{
+    $user_id = $this->session->userdata('user_id');
+
+    if (!$user_id) {
+        echo json_encode(['success' => false, 'message' => '로그인이 필요합니다']);
+        return;
+    }
+
+    // 댓글 정보 가져오기
+    $comment = $this->Comments_model->get_comment($comment_id);
+    if (!$comment) {
+        echo json_encode(['success' => false, 'message' => '댓글이 존재하지 않습니다']);
+        return;
+    }
+
+    // 작성자만 삭제 가능
+    if ($comment->user_id !== $user_id) {
+        echo json_encode(['success' => false, 'message' => '삭제 권한이 없습니다']);
+        return;
+    }
+
+    // 삭제 시도
+    $deleted = $this->Comments_model->delete_comment($comment_id, $user_id);
+if ($deleted) {
+        echo "<script>
+                alert('댓글이 삭제되었습니다.');
+                location.href = '" . base_url('main/view/' . $comment->post_id) . "';
+              </script>";
+    } else {
+        echo "<script>
+                alert('댓글 삭제 실패');
+                history.back();
+              </script>";
+    }
+}
+
     // public function comment($post_id)
     // {
     //     $user_id = $this->session->userdata('user_id');
@@ -171,7 +210,60 @@ public function reply($post_id)
     redirect('/main/index');
 }
 
+    public function comments($post_id)
+{
+    $user_id = $this->session->userdata('user_id');
+    if (!$user_id) {
+        show_error('로그인이 필요합니다.');
+        return;
+    }
+
+    $content = $this->input->post('comment', true);
+    if (!$content) {
+        show_error('댓글 내용이 비어있습니다.');
+        return;
+    }
+
+    $inserted = $this->Comments_model->insert_comment([
+        'post_id' => $post_id,
+        'user_id' => $user_id,
+        'content' => $content,
+        'created_at' => date('Y-m-d H:i:s')
+    ]);
+
+    if ($inserted) {
+        echo "ok";
+    } else {
+        log_message('error', '댓글 DB 저장 실패');
+        echo "fail";
+    }
+}
+
+public function update_comment($comment_id)
+{
+    $this->load->model('Comment_model');
+    $content = $this->input->post('content', true); // XSS 필터 적용
+
+    if (empty(trim($content))) {
+        echo 'empty_content';
+        return;
+    }
+
+    // 기존 댓글 내용과 같으면 변경 불가 처리도 가능
+    $original = $this->Comment_model->get_comment($comment_id);
+    if ($original && trim($original->content) === trim($content)) {
+        echo 'no_change';
+        return;
+    }
+
+    $result = $this->Comment_model->update_comment($comment_id, ['content' => $content]);
+
+    if ($result) {
+        echo 'ok';
+    } else {
+        echo 'fail';
+    }
+}
 
 
 }
-  
