@@ -234,3 +234,15 @@ header {
 .post-actions a:hover {
   opacity: 0.85;
 }
+.post-item {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  font-size: 14px;
+}
+.post-item a {
+  text-decoration: none;
+  color: #333;
+}
+.post-item a:hover {
+  text-decoration: underline;
+}
