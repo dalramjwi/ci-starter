@@ -239,31 +239,5 @@ public function reply($post_id)
     }
 }
 
-public function update_comment($comment_id)
-{
-    $this->load->model('Comment_model');
-    $content = $this->input->post('content', true); // XSS 필터 적용
-
-    if (empty(trim($content))) {
-        echo 'empty_content';
-        return;
-    }
-
-    // 기존 댓글 내용과 같으면 변경 불가 처리도 가능
-    $original = $this->Comment_model->get_comment($comment_id);
-    if ($original && trim($original->content) === trim($content)) {
-        echo 'no_change';
-        return;
-    }
-
-    $result = $this->Comment_model->update_comment($comment_id, ['content' => $content]);
-
-    if ($result) {
-        echo 'ok';
-    } else {
-        echo 'fail';
-    }
-}
-
 
 }

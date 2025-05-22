@@ -8,7 +8,7 @@ class Write extends MY_Controller
         $this->load->model('Posts_model');
     }
 
-    // 게시글 목록을 보여주는 메서드
+    // 게시글 작성 화면을 보여주는 메서드
     public function index()
     {
         $data['title'] = '게시판';

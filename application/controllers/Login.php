@@ -6,7 +6,7 @@ class Login extends MY_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Users_model'); // 회원 관련된 데이터 모델
+        $this->load->model('Users_model');
     }
 
     // 로그인 폼을 보여주는 메서드
@@ -26,7 +26,7 @@ class Login extends MY_Controller
 
         // DB에서 user_id에 맞는 사용자 정보 가져오기
         $user = $this->Users_model->get_by_user_id($user_id);
-
+//todo 로그인 실패 시 echo로 처리하는 부분, 추후에 모달 혹은 alert로 처리할 것
         if ($user) {
             // DB에 저장된 비밀번호와 입력한 비밀번호 비교
             if ($user->user_pw === $user_pw) {

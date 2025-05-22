@@ -20,12 +20,10 @@ public function delete_comment($comment_id, $user_id)
 }
 
 
-    public function update_comment($comment_id, $user_id, $content)
+    public function update_comment($comment_id, $data)
     {
-        return $this->db
-                    ->where('comment_id', $comment_id)
-                    ->where('user_id', $user_id)
-                    ->update('comments', ['content' => $content]);
+        $this->db->where('comment_id', $comment_id);
+        return $this->db->update('comments', $data);
     }
 public function get_comment($comment_id)
 {
