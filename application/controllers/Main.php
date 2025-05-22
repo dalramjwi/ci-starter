@@ -150,10 +150,14 @@ public function reply($post_id)
 
     $depth = $parent_post->depth + 1;
     $group_id = $parent_post->group_id;
+    // 제목이 비어있으면 자동으로 생성
+    if (empty(trim($title))) {
+        $title = $parent_post->title . '의 답글입니다';
+    }
 
     $data = [
         'user_id' => $user_id,
-        'title' => $title? $title : null,  // 제목이 없으면 null 처리
+        'title' => $title,
         'content' => $content,
         'created_at' => date('Y-m-d H:i:s'),
         'parent_id' => $post_id,

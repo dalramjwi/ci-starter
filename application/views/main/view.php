@@ -1,7 +1,7 @@
 <h2 class="post-title"><?php echo htmlspecialchars($post->title); ?></h2>
 <p class="post-author">작성자: <?php echo htmlspecialchars($post->user_id); ?></p>
-<p class="post-content"><?php echo nl2br(htmlspecialchars($post->content)); ?></p>
 <p class="post-date">작성일: <?php echo $post->created_at; ?></p>
+<p class="post-content"><?php echo nl2br(htmlspecialchars($post->content)); ?></p>
 
 <?php if ($this->session->userdata('user_id') == $post->user_id): ?>
     <div class="post-actions">

@@ -1,8 +1,10 @@
-<?php foreach ($posts as $post): ?>
+<?php foreach($posts as $post): ?>
+    <?php
+        $prefix = str_repeat('RE:', $post->depth);
+    ?>
     <div class="post-item" style="margin-left: <?= $post->depth * 20 ?>px;">
-        <strong><?= $post->title ?: '(댓글)' ?></strong><br>
-        <?= nl2br($post->content) ?><br>
-        <small><?= $post->created_at ?></small>
-        <hr>
+        <?= $prefix ?> <a href="<?= base_url('main/view/' . $post->post_id) ?>">
+            <?= htmlspecialchars($post->title) ?>
+        </a>
     </div>
 <?php endforeach; ?>
