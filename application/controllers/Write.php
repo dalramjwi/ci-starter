@@ -18,24 +18,28 @@ class Write extends MY_Controller
         $this->load->view('templates/footer');
     }
     public function wrote() 
-    {
-        $user_id = $this->session->userdata('user_id');
-        $title = $this->input->post('title');
-        $content = $this->input->post('content');
+{
+    $user_id = $this->session->userdata('user_id');
+    $title = $this->input->post('title');
+    $content = $this->input->post('content');
 
-        $data = [
-            'user_id' => $user_id,
-            'title' => $title,
-            'content' => $content,
-            'created_at' => date('Y-m-d H:i:s'),
-            'parent_id' => null,     // 원글이니까 NULL
-            'depth' => 0             // 원글은 depth 0
-        ];
+    $data = [
+        'user_id' => $user_id,
+        'title' => $title,
+        'content' => $content,
+        'created_at' => date('Y-m-d H:i:s'),
+        'parent_id' => null,
+        'depth' => 0
+    ];
 
-        $this->Posts_model->insert($data);
+    // 먼저 insert
+    $insert_id = $this->Posts_model->insert($data);
 
-        redirect('/main');
-    }
+    // group_id를 자기 자신으로 설정
+    $this->Posts_model->update_post($insert_id, ['group_id' => $insert_id]);
+
+    redirect('/main');
+}
 
 
 }
