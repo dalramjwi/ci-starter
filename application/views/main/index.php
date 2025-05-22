@@ -1,9 +1,9 @@
 <div class="write_div">
-    <div class="write_btn">
-        <?php if ($this->session->userdata('user_id')): ?>
+    <?php if ($this->session->userdata('user_id')): ?>
+        <div class="write_btn">
             <a href="<?php echo base_url('write'); ?>">게시물 작성</a>
+        </div>
         <?php endif; ?>
-    </div>
 
     <div class="view_select">
         <label for="view_option">게시글 조회 옵션:</label>
