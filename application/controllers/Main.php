@@ -72,33 +72,33 @@ class Main extends MY_Controller
 
         redirect('/main');
     }
-    public function comment($post_id)
-    {
-        $user_id = $this->session->userdata('user_id');
-        $content = $this->input->post('comment');
+    // public function comment($post_id)
+    // {
+    //     $user_id = $this->session->userdata('user_id');
+    //     $content = $this->input->post('comment');
 
-        // 부모 글 가져오기
-        $parent_post = $this->Posts_model->get_post($post_id);
+    //     // 부모 글 가져오기
+    //     $parent_post = $this->Posts_model->get_post($post_id);
 
-        // 부모 글이 없으면 depth 0, 있으면 부모 depth + 1
-        $depth = $parent_post ? $parent_post->depth + 1 : 0;
+    //     // 부모 글이 없으면 depth 0, 있으면 부모 depth + 1
+    //     $depth = $parent_post ? $parent_post->depth + 1 : 0;
 
-        $data = [
-            'user_id' => $user_id,
-            'title' => null,          // 댓글에는 제목이 없으니까 null 처리
-            'content' => $content,
-            'created_at' => date('Y-m-d H:i:s'),
-            'parent_id' => $post_id,
-            'depth' => $depth,
-            'is_popular' => false
-        ];
+    //     $data = [
+    //         'user_id' => $user_id,
+    //         'title' => null,          // 댓글에는 제목이 없으니까 null 처리
+    //         'content' => $content,
+    //         'created_at' => date('Y-m-d H:i:s'),
+    //         'parent_id' => $post_id,
+    //         'depth' => $depth,
+    //         'is_popular' => false
+    //     ];
 
-        // 새 댓글/답글 저장
-        $this->Posts_model->insert($data);
+    //     // 새 댓글/답글 저장
+    //     $this->Posts_model->insert($data);
 
-        // 댓글이 달린 게시글로 리다이렉트 (부모 글)
-        redirect('/main/view/' . $post_id);
-    }
+    //     // 댓글이 달린 게시글로 리다이렉트 (부모 글)
+    //     redirect('/main/view/' . $post_id);
+    // }
     private function build_post_tree($posts, $parent_id = null, $depth = 0)
     {
         $tree = [];
@@ -134,6 +134,38 @@ class Main extends MY_Controller
 
         echo json_encode(['html' => $html]);
     }
+
+public function reply($post_id)
+{
+    $user_id = $this->session->userdata('user_id');
+    $content = $this->input->post('reply');
+    $title = $this->input->post('title');
+
+    $parent_post = $this->Posts_model->get_post($post_id);
+
+    if (!$parent_post) {
+        show_error('부모 게시글이 존재하지 않습니다.');
+        return;
+    }
+
+    $depth = $parent_post->depth + 1;
+    $group_id = $parent_post->group_id;
+
+    $data = [
+        'user_id' => $user_id,
+        'title' => $title? $title : null,  // 제목이 없으면 null 처리
+        'content' => $content,
+        'created_at' => date('Y-m-d H:i:s'),
+        'parent_id' => $post_id,
+        'depth' => $depth,
+        'group_id' => $group_id,
+        'is_popular' => false
+    ];
+
+    $this->Posts_model->insert($data);
+
+    redirect('/main/view/' . $post_id);
+}
 
 
 
