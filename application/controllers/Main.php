@@ -15,19 +15,19 @@ class Main extends MY_Controller
         $this->load->model('Comments_model');
     }
 
-    public function index()
-    {
-        // 게시글 불러오기
-        $data['title'] = '계층형 게시판 테스트';
-        $all_posts = $this->Posts_model->get_all(); // 정렬되지 않은 모든 게시글
-        $data['posts'] = $this->build_post_tree($all_posts); // 계층 구조로 정렬
+public function index()
+{
+    $data['title'] = '계층형 게시판 테스트';
 
+    // 기본값으로 최신글 10개 total 조회(트리 변환까지)
+    $all_posts = $this->Posts_model->get_all(0, 10);
+    $data['posts'] = $this->build_post_tree($all_posts);
 
-        // 뷰 로드
-        $this->load->view('templates/header', $data);
-        $this->load->view('main/index', $data);
-        $this->load->view('templates/footer');
-    }
+    $this->load->view('templates/header', $data);
+    $this->load->view('main/index', $data);
+    $this->load->view('templates/footer');
+}
+
     public function view($post_id)
     {
         // 게시글 상세보기
@@ -155,24 +155,53 @@ if ($deleted) {
 
         return $tree;
     }
-    public function view_option()
-    {
-        $input = json_decode(file_get_contents('php://input'), true);
-        $option = $input['view_option'] ?? 'total';
+    // public function view_option()
+    // {
+    //     $input = json_decode(file_get_contents('php://input'), true);
+    //     $view_option_default = 'total';
+    //     $option = $input['view_option'] ?? $view_option_default;
 
-        // 선택 옵션에 따라 게시글 조회
-        if ($option === 'base') {
-            $posts = $this->Posts_model->get_only_base(); // depth 0만 조회
-        } else {
-            $all_posts = $this->Posts_model->get_all(); // 전체
-            $posts = $this->build_post_tree($all_posts); // 계층 구조로 정리
-        }
+    //     // 선택 옵션에 따라 게시글 조회
+    //     if ($option === 'base') {
+    //         $posts = $this->Posts_model->get_only_base(); // depth 0만 조회
+    //     } else {
+    //         $all_posts = $this->Posts_model->get_all(); // 전체
+    //         $posts = $this->build_post_tree($all_posts); // 계층 구조로 정리
+    //     }
 
-        // 뷰를 문자열로 렌더링해서 응답
-        $html = $this->load->view('main/post_list', ['posts' => $posts], true);
+    //     // 뷰를 문자열로 렌더링해서 응답
+    //     $html = $this->load->view('main/post_list', ['posts' => $posts], true);
 
-        echo json_encode(['html' => $html]);
-    }
+    //     echo json_encode(['html' => $html]);
+    // }
+    // public function page_option()
+    // {
+    //     $input = json_decode(file_get_contents('php://input'), true);
+    //     $page_option_default = 10;
+    //     $option = $input['page_option'] ?? $page_option_default;
+
+    //     switch ($option) {
+    //         case 10:
+    //             $posts = $this->Posts_model->get_all(0, 10);
+    //             break;
+    //         case 20:
+    //             $posts = $this->Posts_model->get_all(0, 20);
+    //             break;
+    //         case 50:
+    //             $posts = $this->Posts_model->get_all(0, 50);
+    //             break;
+    //         case 100:
+    //             $posts = $this->Posts_model->get_all(0, 100);
+    //             break;
+    //         default:
+    //             $posts = $this->Posts_model->get_all(0, 10);
+    //     }
+
+    //     // 뷰를 문자열로 렌더링해서 응답
+    //     $html = $this->load->view('main/post_list', ['posts' => $posts], true);
+
+    //     echo json_encode(['html' => $html]);
+    // }
 
 public function reply($post_id)
 {
@@ -237,6 +266,25 @@ public function reply($post_id)
         log_message('error', '댓글 DB 저장 실패');
         echo "fail";
     }
+}
+
+public function fetch_posts()
+{
+    $input = json_decode(file_get_contents('php://input'), true);
+    $view_option = $input['view_option'] ?? 'total';
+    $limit = isset($input['page_option']) ? (int)$input['page_option'] : 10;
+
+    if ($view_option === 'base') {
+        // 최신순으로 parent_id가 NULL인 게시글 n개 조회
+        $posts = $this->Posts_model->get_only_base_limit($limit);
+    } else {
+        // total: 최신순 전체 게시글 n개 조회 후 트리 구조 정렬
+        $all_posts = $this->Posts_model->get_all(0, $limit);
+        $posts = $this->build_post_tree($all_posts);
+    }
+
+    $html = $this->load->view('main/post_list', ['posts' => $posts], true);
+    echo json_encode(['html' => $html]);
 }
 
 

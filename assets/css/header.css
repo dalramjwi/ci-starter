@@ -419,3 +419,8 @@ header {
 .btn-delete:hover {
   background-color: #d32f2f;
 }
+.main_select_div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}

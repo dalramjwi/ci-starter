@@ -5,14 +5,41 @@ class Posts_model extends CI_Model {
         $this->load->database();
     }
 
-    // 전체 게시글 조회 (정렬: 최신순)
-    public function get_all()
-    {
-        return $this->db
-            ->order_by('created_at', 'DESC')
-            ->get('posts')
-            ->result();
-    }
+//     // 전체 게시글 조회 (정렬: 최신순)
+//     public function get_all()
+//     {
+//         return $this->db
+//             ->order_by('created_at', 'DESC')
+//             ->get('posts')
+//             ->result();
+//     }
+// // 최신순 정렬 + limit 추가
+// public function get_all_limit($offset = 0, $limit = 10)
+// {
+//     return $this->db
+//         ->order_by('created_at', 'DESC')
+//         ->limit($limit, $offset)
+//         ->get('posts')
+//         ->result();
+// }
+public function get_only_base_limit($limit = 10)
+{
+    return $this->db
+        ->where('parent_id IS NULL', null, false)
+        ->order_by('created_at', 'DESC')
+        ->limit($limit)
+        ->get('posts')
+        ->result();
+}
+
+public function get_all($offset = 0, $limit = 10)
+{
+    return $this->db
+        ->order_by('created_at', 'DESC')
+        ->limit($limit, $offset)
+        ->get('posts')
+        ->result();
+}
 
     // 최상위 게시글만 조회 (depth = 0)
     public function get_only_base()
