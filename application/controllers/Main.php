@@ -168,7 +168,7 @@ public function reply($post_id)
 
     $this->Posts_model->insert($data);
 
-    redirect('/main/view/' . $post_id);
+    redirect('/main/index');
 }
 
 
