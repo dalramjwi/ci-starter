@@ -5,13 +5,13 @@
         </div>
     <?php endif; ?>
     <div class="main_select_div">
-        <div class="view_select">
+        <!-- <div class="view_select">
             <label for="view_option">게시글 조회 옵션:</label>
             <select name="view_option" id="view_option">
                 <option value="total" selected>게시글 + 답글 조회</option>
                 <option value="base">게시글만 조회</option>
             </select>
-        </div>
+        </div> -->
         <div class="page_select">
             <label for="page_option">페이지당 게시글 수 설정</label>
             <select name="page_option" id="page_option">
