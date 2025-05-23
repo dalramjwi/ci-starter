@@ -25,12 +25,26 @@ class Posts_closure_model extends CI_Model
     // {
     //     return $this->db->get_where('posts_closure', ['descendant' => $descendant])->result_array();
     // }
-    public function get_ancestors($post_id) {
-    return $this->db
+    public function get_ancestors($post_id) 
+    {
+      return $this->db
         ->where('descendant', $post_id)
         ->order_by('depth', 'ASC') // 가까운 조상부터
         ->get('posts_closure')
         ->result();
+    }
+
+    public function get_top_ancestor($post_id)
+{
+    return $this->db
+        ->select('ancestor')
+        ->from('posts_closure')
+        ->where('descendant', $post_id)
+        ->order_by('depth', 'DESC')  
+        ->limit(1)
+        ->get()
+        ->row();
 }
+
 
 }
