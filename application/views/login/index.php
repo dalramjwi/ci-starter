@@ -1,4 +1,4 @@
-<p class = "title"><?php echo $title; ?></p>
+<p class = "title"><?php echo $login; ?></p>
 <div class="login-form">
     <form action="<?php echo base_url('login/submit'); ?>" method="post">
         <label for="user_id">아이디:</label>
@@ -7,6 +7,6 @@
         <label for="user_pw">비밀번호:</label>
         <input type="password" name="user_pw" id="user_pw" required>
 
-        <button type="submit"><?php echo $title; ?></button>
+        <button type="submit"><?php echo $login; ?></button>
     </form>
 </div>

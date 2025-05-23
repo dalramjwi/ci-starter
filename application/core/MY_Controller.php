@@ -104,10 +104,23 @@ class MY_Controller extends CI_Controller
      */
     public function setCommonVars()
     {
-        $aVars = array();
-
-        $aVars['test'] = array("test1" => "test1");
+        $aVars = array(
+            'sitename' => '멋진 사이트',
+            'writepagename' => '글쓰기 페이지',
+            'login' => '로그인'
+        );
 
         $this->load->vars($aVars);
     }
+    /**
+     * 공통 페이지 랜더링 세팅
+     * @param $view 경로,$data 데이터
+     */
+    public function render($view, $data = array())
+    {
+        $this->load->view('templates/header');
+        $this->load->view($view, $data);
+        $this->load->view('templates/footer');
+    }
+
 }
