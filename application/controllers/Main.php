@@ -18,15 +18,27 @@ class Main extends MY_Controller
     }
 
 public function index()
+
 {
     $data['title'] = '계층형 게시판 테스트';
+    $limit = 10;
+    $offset = 0;
 
-    // 기본값으로 최신글 10개 total 조회
-    $data['posts'] = $this->Posts_model->get_all();
+    $all_posts = $this->Posts_model->get_all($offset, $limit);
+    $total_count = $this->Posts_model->get_total_count();
+
+    $data = [
+        'posts' => $all_posts,
+        'total_count' => $total_count,
+        'limit' => $limit,
+        'current_page' => 1,
+    ];
 
     $this->load->view('templates/header', $data);
     $this->load->view('main/index', $data);
     $this->load->view('templates/footer');
+
+
 }
 
     public function view($post_id)
@@ -262,23 +274,23 @@ public function reply($parent_id)
 public function fetch_posts()
 {
     $input = json_decode(file_get_contents('php://input'), true);
-    // $view_option = $input['view_option'] ?? 'total';
+
     $limit = isset($input['page_option']) ? (int)$input['page_option'] : 10;
+    $page = isset($input['page']) ? (int)$input['page'] : 1;
+    $offset = ($page - 1) * $limit;
 
-    // if ($view_option === 'base') {
-    //     // 최신순으로 parent_id가 NULL인 게시글 n개 조회
-    //     $posts = $this->Posts_model->get_only_base_limit($limit);
-    // } else {
-    //     // total: 최신순 전체 게시글 n개 조회 후 트리 구조 정렬
-    //     $all_posts = $this->Posts_model->get_all(0, $limit);
-    //     $posts = $this->build_post_tree($all_posts);
-    // }
-        $posts = $this->Posts_model->get_all(0, $limit);
+    $posts = $this->Posts_model->get_all($offset, $limit);
+    $total_count = $this->Posts_model->get_total_count();
 
+    $total_pages = ceil($total_count / $limit);
 
     $html = $this->load->view('main/post_list', ['posts' => $posts], true);
-    echo json_encode(['html' => $html]);
-}
 
+    echo json_encode([
+        'html' => $html,
+        'total_pages' => $total_pages,
+        'current_page' => $page,
+    ]);
+}
 
 }

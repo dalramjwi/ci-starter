@@ -30,7 +30,7 @@ public function get_only_base_limit($limit = 10)
 //         ->get()
 //         ->result();
 // }
-public function get_all($offset = 0, $limit = 10)
+public function get_all($offset, $limit)
 {
     return $this->db
         ->select('posts.*, path.path')
@@ -114,6 +114,16 @@ public function get_descendants($post_id)
     $query = $this->db->get();
     return $query->result();
 }
+// 전체 게시글 개수 구하기
+public function count_all_posts()
+{
+    return $this->db->count_all('posts');
+}
+public function get_total_count()
+{
+    return $this->db->count_all('posts');
+}
+
 
 }
 
