@@ -21,9 +21,8 @@ public function index()
 {
     $data['title'] = '계층형 게시판 테스트';
 
-    // 기본값으로 최신글 10개 total 조회(트리 변환까지)
-    $all_posts = $this->Posts_model->get_all(0, 10);
-    $data['posts'] = $this->build_post_tree($all_posts);
+    // 기본값으로 최신글 10개 total 조회
+    $data['posts'] = $this->Posts_model->get_all();
 
     $this->load->view('templates/header', $data);
     $this->load->view('main/index', $data);
@@ -246,23 +245,28 @@ public function reply($parent_id)
     $title = $this->input->post('title');
     $content = $this->input->post('reply');
 
-    // 제목 자동 생성
-    if (empty(trim($title))) {
-        $title = $parent_post->title . '의 답글입니다';
-    }
-
     // 부모 정보 가져오기 (depth, path)
     $parent = $this->Posts_model->get_post($parent_id);
     $parent_path = $this->Path_model->get_path($parent_id); // ex: "0001/0012"
     $parent_depth = $parent->depth;
 
+    // 최상위 부모 찾기 (답글 작성 시 group_id로 넣기 위함)
+    $top_ancestor = $this->Posts_closure_model->get_top_ancestor($parent_id);
+    $group_id = $top_ancestor->ancestor;
+
+
+    // 제목 자동 생성
+    if (empty(trim($title))) {
+        $title = $parent->title . '의 답글입니다';
+    }
     // posts에 insert
     $data = [
         'user_id' => $user_id,
         'title' => $title,
         'content' => $content,
         'created_at' => date('Y-m-d H:i:s'),
-        'depth' => $parent_depth + 1
+        'depth' => $parent_depth + 1,
+        'group_id' => $group_id 
     ];
     $insert_id = $this->Posts_model->insert($data);
 
