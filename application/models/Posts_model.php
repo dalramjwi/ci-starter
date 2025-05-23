@@ -85,6 +85,7 @@ public function get_all($offset = 0, $limit = 10)
             ->where('post_id', $post_id)
             ->delete('posts');
     }
+    
     //!이후 최신 작성한 게시글 쿼리임
     // 게시글 insert
     public function insert($data)
@@ -103,6 +104,16 @@ public function get_all($offset = 0, $limit = 10)
         $this->db->where('post_id', $post_id);
         return $this->db->update('posts', ['group_id' => $group_id]);
     }
+public function get_descendants($post_id)
+{
+    $this->db->select('posts.post_id, posts.user_id');
+    $this->db->from('posts_closure AS closure_table');
+    $this->db->join('posts', 'closure_table.descendant = posts.post_id');
+    $this->db->where('closure_table.ancestor', $post_id);
+    $this->db->where('closure_table.depth >=', 1);
+    $query = $this->db->get();
+    return $query->result();
+}
 
 }
 

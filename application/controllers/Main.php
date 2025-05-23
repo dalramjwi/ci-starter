@@ -67,13 +67,46 @@ public function index()
 
         redirect('/main/view/' . $post_id);
     }
-    public function delete($post_id)
-    {
-        // 게시글 삭제 처리
-        $this->Posts_model->delete_post($post_id);
-
+public function delete($post_id)
+{
+    // 1) 해당 게시글 정보 가져오기
+    $post = $this->Posts_model->get_post($post_id);
+    if (!$post) {
+        // 게시글 없으면 메인으로 리다이렉트
         redirect('/main');
+        return;
     }
+
+    // 2) 클로저 테이블에서 자손 글 모두 조회(depth >= 1)
+    $descendants = $this->Posts_model->get_descendants($post_id); 
+    // get_descendants 함수는 post_id의 자손 리스트 반환, depth 포함
+
+    if (!empty($descendants)) {
+        // 3) 자손 글 작성자 모두 검사 (작성자 동일해야 삭제 가능)
+        foreach ($descendants as $descendant) {
+            if ($descendant->user_id !== $post->user_id) {
+                // 작성자가 다르면 삭제 불가, 메시지 출력 후 중단
+                        echo "<script>
+                alert('자식 글 작성자가 다르므로 삭제할 수 없습니다.');
+                location.href = '" . base_url('main/view/' . $post_id) . "';
+              </script>";
+                return;
+            }
+        }
+    }
+
+    // 4) 작성자가 모두 같으면 게시글 + 자손 글 모두 삭제 처리
+    // 자손 글 먼저 삭제 후 부모 글 삭제
+    foreach ($descendants as $descendant) {
+        $this->Posts_model->delete_post($descendant->post_id);
+    }
+    $this->Posts_model->delete_post($post_id);
+                        echo "<script>
+                alert('게시글 및 자손 글이 삭제되었습니다.');
+                location.href = '" . base_url('main') . "';
+              </script>";
+}
+
 
 public function delete_comment($comment_id)
 {
