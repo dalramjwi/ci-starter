@@ -30,7 +30,7 @@
 
 <script>
 function fetchPosts() {
-    const viewOption = document.getElementById('view_option').value;
+    // const viewOption = document.getElementById('view_option').value;
     const pageOption = document.getElementById('page_option').value;
 
     fetch('<?php echo base_url('main/fetch_posts'); ?>', {
@@ -39,7 +39,7 @@ function fetchPosts() {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-            view_option: viewOption,
+            // view_option: viewOption,
             page_option: parseInt(pageOption, 10)
         })
     })
@@ -54,6 +54,6 @@ function fetchPosts() {
 }
 
 // 두 select 요소 모두 변경되면 fetchPosts 함수 실행
-document.getElementById('view_option').addEventListener('change', fetchPosts);
+// document.getElementById('view_option').addEventListener('change', fetchPosts);
 document.getElementById('page_option').addEventListener('change', fetchPosts);
 </script>

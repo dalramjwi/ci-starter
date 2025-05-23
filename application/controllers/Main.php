@@ -319,17 +319,19 @@ public function reply($parent_id)
 public function fetch_posts()
 {
     $input = json_decode(file_get_contents('php://input'), true);
-    $view_option = $input['view_option'] ?? 'total';
+    // $view_option = $input['view_option'] ?? 'total';
     $limit = isset($input['page_option']) ? (int)$input['page_option'] : 10;
 
-    if ($view_option === 'base') {
-        // 최신순으로 parent_id가 NULL인 게시글 n개 조회
-        $posts = $this->Posts_model->get_only_base_limit($limit);
-    } else {
-        // total: 최신순 전체 게시글 n개 조회 후 트리 구조 정렬
-        $all_posts = $this->Posts_model->get_all(0, $limit);
-        $posts = $this->build_post_tree($all_posts);
-    }
+    // if ($view_option === 'base') {
+    //     // 최신순으로 parent_id가 NULL인 게시글 n개 조회
+    //     $posts = $this->Posts_model->get_only_base_limit($limit);
+    // } else {
+    //     // total: 최신순 전체 게시글 n개 조회 후 트리 구조 정렬
+    //     $all_posts = $this->Posts_model->get_all(0, $limit);
+    //     $posts = $this->build_post_tree($all_posts);
+    // }
+        $posts = $this->Posts_model->get_all(0, $limit);
+
 
     $html = $this->load->view('main/post_list', ['posts' => $posts], true);
     echo json_encode(['html' => $html]);

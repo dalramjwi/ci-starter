@@ -11,14 +11,38 @@ public function get_only_base_limit($limit = 10)
         ->result();
 }
 
+// public function get_all($offset = 0, $limit = 10)
+// {
+//     return $this->db
+//         ->order_by('created_at', 'DESC')
+//         ->limit($limit, $offset)
+//         ->get('posts')
+//         ->result();
+// }
+// public function get_all($offset = 0, $limit = 10)
+// {
+//     return $this->db
+//         ->select('posts.*, path.path')
+//         ->from('posts')
+//         ->join('path', 'posts.post_id = path.post_id')
+//         ->order_by('path.path', 'ASC')  // 계층 구조 순서대로 정렬
+//         ->limit($limit, $offset)
+//         ->get()
+//         ->result();
+// }
 public function get_all($offset = 0, $limit = 10)
 {
     return $this->db
-        ->order_by('created_at', 'DESC')
+        ->select('posts.*, path.path')
+        ->from('posts')
+        ->join('path', 'posts.post_id = path.post_id')
+        ->order_by('posts.group_id', 'DESC')  // 최신글 순서로 본글 정렬
+        ->order_by('path.path', 'ASC')        // 본글 내 답글은 경로 오름차순 정렬 (계층형)
         ->limit($limit, $offset)
-        ->get('posts')
+        ->get()
         ->result();
 }
+
 
     // 최상위 게시글만 조회 (depth = 0)
     public function get_only_base()
@@ -73,6 +97,11 @@ public function get_all($offset = 0, $limit = 10)
     public function get_post($post_id)
     {
         return $this->db->get_where('posts', ['post_id' => $post_id])->row();
+    }
+    public function update_group_id($post_id, $group_id)
+    {
+        $this->db->where('post_id', $post_id);
+        return $this->db->update('posts', ['group_id' => $group_id]);
     }
 
 }
