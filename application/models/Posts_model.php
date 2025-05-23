@@ -1,27 +1,6 @@
 <?php 
 class Posts_model extends CI_Model {
-    public function __construct()
-    {
-        $this->load->database();
-    }
 
-//     // 전체 게시글 조회 (정렬: 최신순)
-//     public function get_all()
-//     {
-//         return $this->db
-//             ->order_by('created_at', 'DESC')
-//             ->get('posts')
-//             ->result();
-//     }
-// // 최신순 정렬 + limit 추가
-// public function get_all_limit($offset = 0, $limit = 10)
-// {
-//     return $this->db
-//         ->order_by('created_at', 'DESC')
-//         ->limit($limit, $offset)
-//         ->get('posts')
-//         ->result();
-// }
 public function get_only_base_limit($limit = 10)
 {
     return $this->db
@@ -51,21 +30,21 @@ public function get_all($offset = 0, $limit = 10)
             ->result();
     }
 
-    // 게시글 단건 조회
-    public function get_post($post_id)
-    {
-        return $this->db
-            ->where('post_id', $post_id)
-            ->get('posts')
-            ->row();
-    }
+    // // 게시글 단건 조회
+    // public function get_post($post_id)
+    // {
+    //     return $this->db
+    //         ->where('post_id', $post_id)
+    //         ->get('posts')
+    //         ->row();
+    // }
 
     // 게시글 등록
-    public function insert($data)
-    {
-        $this->db->insert('posts', $data);
-        return $this->db->insert_id();  // insert된 ID 리턴
-    }
+    // public function insert($data)
+    // {
+    //     $this->db->insert('posts', $data);
+    //     return $this->db->insert_id();  // insert된 ID 리턴
+    // }
 
     // 게시글 수정
     public function update_post($post_id, $data)
@@ -81,5 +60,18 @@ public function get_all($offset = 0, $limit = 10)
         return $this->db
             ->where('post_id', $post_id)
             ->delete('posts');
+    }
+    //!이후 최신 작성한 게시글 쿼리임
+        // 게시글 insert
+    public function insert_post($data)
+    {
+        $this->db->insert('posts', $data);
+        return $this->db->insert_id();
+    }
+
+    // 게시글 정보 가져오기
+    public function get_post($post_id)
+    {
+        return $this->db->get_where('posts', ['post_id' => $post_id])->row_array();
     }
 }
