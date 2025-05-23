@@ -10,9 +10,11 @@ class Main extends MY_Controller
         // 공통 변수 설정
         $this->setCommonVars(); 
         
-        // 게시판 관련 모델 로드
         $this->load->model('Posts_model');
         $this->load->model('Comments_model');
+        $this->load->model('Posts_closure_model');
+        $this->load->model('Path_model');
+        $this->load->helper('utility_helper');
     }
 
 public function index()

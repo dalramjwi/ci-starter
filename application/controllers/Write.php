@@ -9,7 +9,6 @@ class Write extends MY_Controller
         $this->load->model('Posts_model');
         $this->load->model('Posts_closure_model');
         $this->load->model('Path_model');
-        // $this->load->helper('base62_encode');
         $this->load->helper('utility_helper');
     }
 
