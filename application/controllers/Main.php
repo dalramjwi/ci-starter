@@ -112,133 +112,43 @@ if ($deleted) {
     }
 }
 
-    // public function comment($post_id)
-    // {
-    //     $user_id = $this->session->userdata('user_id');
-    //     $content = $this->input->post('comment');
-
-    //     // 부모 글 가져오기
-    //     $parent_post = $this->Posts_model->get_post($post_id);
-
-    //     // 부모 글이 없으면 depth 0, 있으면 부모 depth + 1
-    //     $depth = $parent_post ? $parent_post->depth + 1 : 0;
-
-    //     $data = [
-    //         'user_id' => $user_id,
-    //         'title' => null,          // 댓글에는 제목이 없으니까 null 처리
-    //         'content' => $content,
-    //         'created_at' => date('Y-m-d H:i:s'),
-    //         'parent_id' => $post_id,
-    //         'depth' => $depth,
-    //         'is_popular' => false
-    //     ];
-
-    //     // 새 댓글/답글 저장
-    //     $this->Posts_model->insert($data);
-
-    //     // 댓글이 달린 게시글로 리다이렉트 (부모 글)
-    //     redirect('/main/view/' . $post_id);
-    // }
-    private function build_post_tree($posts, $parent_id = null, $depth = 0)
-    {
-        $tree = [];
-
-        foreach ($posts as $post) {
-            if ($post->parent_id === $parent_id) {
-                $post->depth = $depth;
-                $tree[] = $post;
-
-                // 자식도 재귀적으로 트리에 붙이기
-                $children = $this->build_post_tree($posts, $post->post_id, $depth + 1);
-                $tree = array_merge($tree, $children);
-            }
-        }
-
-        return $tree;
+public function update_comment($comment_id)
+{
+    $user_id = $this->session->userdata('user_id');
+    if (!$user_id) {
+        echo json_encode(['success' => false, 'message' => '로그인이 필요합니다']);
+        return;
     }
-    // public function view_option()
-    // {
-    //     $input = json_decode(file_get_contents('php://input'), true);
-    //     $view_option_default = 'total';
-    //     $option = $input['view_option'] ?? $view_option_default;
 
-    //     // 선택 옵션에 따라 게시글 조회
-    //     if ($option === 'base') {
-    //         $posts = $this->Posts_model->get_only_base(); // depth 0만 조회
-    //     } else {
-    //         $all_posts = $this->Posts_model->get_all(); // 전체
-    //         $posts = $this->build_post_tree($all_posts); // 계층 구조로 정리
-    //     }
+    $content = $this->input->post('content', true);
+    if (empty(trim($content))) {
+        echo json_encode(['success' => false, 'message' => '댓글 내용을 입력하세요']);
+        return;
+    }
 
-    //     // 뷰를 문자열로 렌더링해서 응답
-    //     $html = $this->load->view('main/post_list', ['posts' => $posts], true);
+    $comment = $this->Comments_model->get_comment($comment_id);
+    if (!$comment) {
+        echo json_encode(['success' => false, 'message' => '댓글이 존재하지 않습니다']);
+        return;
+    }
 
-    //     echo json_encode(['html' => $html]);
-    // }
-    // public function page_option()
-    // {
-    //     $input = json_decode(file_get_contents('php://input'), true);
-    //     $page_option_default = 10;
-    //     $option = $input['page_option'] ?? $page_option_default;
+    if ($comment->user_id !== $user_id) {
+        echo json_encode(['success' => false, 'message' => '수정 권한이 없습니다']);
+        return;
+    }
 
-    //     switch ($option) {
-    //         case 10:
-    //             $posts = $this->Posts_model->get_all(0, 10);
-    //             break;
-    //         case 20:
-    //             $posts = $this->Posts_model->get_all(0, 20);
-    //             break;
-    //         case 50:
-    //             $posts = $this->Posts_model->get_all(0, 50);
-    //             break;
-    //         case 100:
-    //             $posts = $this->Posts_model->get_all(0, 100);
-    //             break;
-    //         default:
-    //             $posts = $this->Posts_model->get_all(0, 10);
-    //     }
+    $updated = $this->Comments_model->update_comment($comment_id, ['content' => $content, 'updated_at' => date('Y-m-d H:i:s')]);
 
-    //     // 뷰를 문자열로 렌더링해서 응답
-    //     $html = $this->load->view('main/post_list', ['posts' => $posts], true);
+    if ($updated) {
+                echo "ok";
 
-    //     echo json_encode(['html' => $html]);
-    // }
+    } else {
+        echo json_encode(['success' => false, 'message' => '댓글 수정 실패']);
+    }
+}
 
-// public function reply($post_id)
-// {
-//     $user_id = $this->session->userdata('user_id');
-//     $content = $this->input->post('reply');
-//     $title = $this->input->post('title');
 
-//     $parent_post = $this->Posts_model->get_post($post_id);
 
-//     if (!$parent_post) {
-//         show_error('부모 게시글이 존재하지 않습니다.');
-//         return;
-//     }
-
-//     $depth = $parent_post->depth + 1;
-//     $group_id = $parent_post->group_id;
-//     // 제목이 비어있으면 자동으로 생성
-//     if (empty(trim($title))) {
-//         $title = $parent_post->title . '의 답글입니다';
-//     }
-
-//     $data = [
-//         'user_id' => $user_id,
-//         'title' => $title,
-//         'content' => $content,
-//         'created_at' => date('Y-m-d H:i:s'),
-//         'parent_id' => $post_id,
-//         'depth' => $depth,
-//         'group_id' => $group_id,
-//         'is_popular' => false
-//     ];
-
-//     $this->Posts_model->insert($data);
-
-//     redirect('/main/index');
-// }
 public function reply($parent_id)
 {
     $user_id = $this->session->userdata('user_id');

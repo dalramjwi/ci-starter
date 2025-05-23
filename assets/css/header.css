@@ -348,12 +348,12 @@ header {
   font-size: 14px;
   text-decoration: none;
 }
-
+.post-btn-edit,
 .btn-edit {
   background-color: #4caf50;
   color: white;
 }
-
+.post-btn-delete,
 .btn-delete {
   background-color: #f44336;
   color: white;

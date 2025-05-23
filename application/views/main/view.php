@@ -9,12 +9,12 @@
         <span>작성일: <?php echo $post->created_at; ?></span>
     </div>
 </div>
-<!-- 부모 글로 이동 -->
+<!-- 부모 글로 이동
 <?php if (!is_null($post->parent_id)): ?>
     <div class="go-to-parent">
         <a href="<?php echo base_url('main/view/' . $post->parent_id); ?>" class="btn-goto-parent">본문으로 가기</a>
     </div>
-<?php endif; ?>
+<?php endif; ?> -->
 
 <!-- 본문 내용 -->
 <p class="post-content"><?php echo nl2br(htmlspecialchars($post->content)); ?></p>
@@ -26,8 +26,8 @@
 
         <?php if ($this->session->userdata('user_id') == $post->user_id): ?>
             <div class="post-actions">
-                <a href="<?php echo base_url('main/edit/' . $post->post_id); ?>" class="btn-edit">수정</a>
-                <a href="<?php echo base_url('main/delete/' . $post->post_id); ?>" class="btn-delete">삭제</a>
+                <a href="<?php echo base_url('main/edit/' . $post->post_id); ?>" class="post-btn-edit">수정</a>
+                <a href="<?php echo base_url('main/delete/' . $post->post_id); ?>" class="post-btn-delete">삭제</a>
             </div>
         <?php endif; ?>
     </div>
@@ -129,7 +129,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // 댓글 수정 버튼 이벤트
+  // 댓글 수정 인라인 처리
     const editButtons = document.querySelectorAll('.btn-edit');
 
     editButtons.forEach(button => {
@@ -140,13 +140,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const contentSpan = li.querySelector('.comment-content');
             const originalContent = contentSpan.textContent.trim();
 
-            // 이미 수정 모드일 경우 중복 실행 방지
-            if (li.querySelector('textarea')) return;
+            if (li.querySelector('textarea')) return; // 이미 수정 모드면 무시
 
-            // 기존 내용 숨기기
+            // 기존 내용 숨김
             contentSpan.style.display = 'none';
 
-            // textarea 생성 및 기존 내용 세팅
+            // textarea 생성 + 기존 내용 넣기
             const textarea = document.createElement('textarea');
             textarea.classList.add('edit-textarea');
             textarea.value = originalContent;
@@ -165,7 +164,7 @@ document.addEventListener("DOMContentLoaded", function () {
             li.insertBefore(cancelBtn, saveBtn.nextSibling);
 
             // 수정 완료 클릭 이벤트
-            saveBtn.addEventListener('click', function () {
+            saveBtn.addEventListener('click', () => {
                 const newContent = textarea.value.trim();
 
                 if (newContent === '') {
@@ -178,8 +177,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     return;
                 }
 
-                // ajax 수정 요청
-                const commentId = button.href.split('/').pop(); // URL에서 comment_id 추출
+                // comment_id 가져오기 (URL에서 추출)
+                const commentId = button.href.split('/').pop();
                 const updateUrl = button.href.replace('edit_comment', 'update_comment');
 
                 fetch(updateUrl, {
@@ -189,33 +188,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
                 .then(response => response.text())
                 .then(data => {
-                    const msg = data.trim();
-                    if (msg === 'ok') {
-                        // 변경된 내용을 HTML로 다시 보여주기 (줄바꿈 처리)
+                    if (data.trim() === 'ok') {
+                        // 성공 시 댓글 내용 업데이트 (줄바꿈 처리)
                         contentSpan.innerHTML = newContent.replace(/\n/g, '<br>');
                         contentSpan.style.display = 'inline';
+
                         textarea.remove();
                         saveBtn.remove();
                         cancelBtn.remove();
-                    } else if (msg === 'not_logged_in') {
+                    } else if (data.trim() === 'not_logged_in') {
                         alert('로그인 후 수정할 수 있습니다.');
-                    } else if (msg === 'empty_content') {
+                    } else if (data.trim() === 'empty_content') {
                         alert('댓글 내용을 입력하세요.');
-                    } else if (msg === 'not_found') {
+                    } else if (data.trim() === 'not_found') {
                         alert('해당 댓글을 찾을 수 없습니다.');
-                    } else if (msg === 'not_author') {
+                    } else if (data.trim() === 'not_author') {
                         alert('본인 댓글만 수정할 수 있습니다.');
-                    } else if (msg === 'no_change') {
+                    } else if (data.trim() === 'no_change') {
                         alert('변경된 내용이 없습니다.');
                     } else {
                         alert('댓글 수정 실패: ' + data);
                     }
                 })
-                .catch(() => alert('댓글 수정 중 오류가 발생했습니다.'));
+                .catch(() => {
+                    alert('댓글 수정 중 오류가 발생했습니다.');
+                });
             });
 
             // 수정 취소 클릭 이벤트
-            cancelBtn.addEventListener('click', function () {
+            cancelBtn.addEventListener('click', () => {
                 textarea.remove();
                 saveBtn.remove();
                 cancelBtn.remove();
