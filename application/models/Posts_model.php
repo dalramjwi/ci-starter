@@ -62,7 +62,7 @@ public function get_all($offset = 0, $limit = 10)
             ->delete('posts');
     }
     //!이후 최신 작성한 게시글 쿼리임
-        // 게시글 insert
+    // 게시글 insert
     public function insert($data)
     {
         $this->db->insert('posts', $data);
@@ -72,6 +72,8 @@ public function get_all($offset = 0, $limit = 10)
     // 게시글 정보 가져오기
     public function get_post($post_id)
     {
-        return $this->db->get_where('posts', ['post_id' => $post_id])->row_array();
+        return $this->db->get_where('posts', ['post_id' => $post_id])->row();
     }
+
 }
+

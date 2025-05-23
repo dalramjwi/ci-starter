@@ -205,38 +205,80 @@ if ($deleted) {
     //     echo json_encode(['html' => $html]);
     // }
 
-public function reply($post_id)
+// public function reply($post_id)
+// {
+//     $user_id = $this->session->userdata('user_id');
+//     $content = $this->input->post('reply');
+//     $title = $this->input->post('title');
+
+//     $parent_post = $this->Posts_model->get_post($post_id);
+
+//     if (!$parent_post) {
+//         show_error('부모 게시글이 존재하지 않습니다.');
+//         return;
+//     }
+
+//     $depth = $parent_post->depth + 1;
+//     $group_id = $parent_post->group_id;
+//     // 제목이 비어있으면 자동으로 생성
+//     if (empty(trim($title))) {
+//         $title = $parent_post->title . '의 답글입니다';
+//     }
+
+//     $data = [
+//         'user_id' => $user_id,
+//         'title' => $title,
+//         'content' => $content,
+//         'created_at' => date('Y-m-d H:i:s'),
+//         'parent_id' => $post_id,
+//         'depth' => $depth,
+//         'group_id' => $group_id,
+//         'is_popular' => false
+//     ];
+
+//     $this->Posts_model->insert($data);
+
+//     redirect('/main/index');
+// }
+public function reply($parent_id)
 {
     $user_id = $this->session->userdata('user_id');
-    $content = $this->input->post('reply');
     $title = $this->input->post('title');
+    $content = $this->input->post('reply');
 
-    $parent_post = $this->Posts_model->get_post($post_id);
-
-    if (!$parent_post) {
-        show_error('부모 게시글이 존재하지 않습니다.');
-        return;
-    }
-
-    $depth = $parent_post->depth + 1;
-    $group_id = $parent_post->group_id;
-    // 제목이 비어있으면 자동으로 생성
+    // 제목 자동 생성
     if (empty(trim($title))) {
         $title = $parent_post->title . '의 답글입니다';
     }
 
+    // 부모 정보 가져오기 (depth, path)
+    $parent = $this->Posts_model->get_post($parent_id);
+    $parent_path = $this->Path_model->get_path($parent_id); // ex: "0001/0012"
+    $parent_depth = $parent->depth;
+
+    // posts에 insert
     $data = [
         'user_id' => $user_id,
         'title' => $title,
         'content' => $content,
         'created_at' => date('Y-m-d H:i:s'),
-        'parent_id' => $post_id,
-        'depth' => $depth,
-        'group_id' => $group_id,
-        'is_popular' => false
+        'depth' => $parent_depth + 1
     ];
+    $insert_id = $this->Posts_model->insert($data);
 
-    $this->Posts_model->insert($data);
+    // closure: 자기 자신
+    $this->Posts_closure_model->insert($insert_id, $insert_id, 0);
+
+    // closure: 부모의 모든 조상을 조회해서 추가
+    $ancestors = $this->Posts_closure_model->get_ancestors($parent_id); 
+    foreach ($ancestors as $ancestor) {
+        $this->Posts_closure_model->insert($ancestor->ancestor, $insert_id, $ancestor->depth + 1);
+    }
+
+    // path: 부모 path + '/' + base62(post_id)
+    $base62_id = base62_encode($insert_id);
+    $path = $parent_path . '/' . $base62_id;
+    $this->Path_model->insert($insert_id, $path);
 
     redirect('/main/index');
 }
