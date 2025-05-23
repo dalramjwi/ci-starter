@@ -63,7 +63,7 @@ public function get_all($offset = 0, $limit = 10)
     }
     //!이후 최신 작성한 게시글 쿼리임
         // 게시글 insert
-    public function insert_post($data)
+    public function insert($data)
     {
         $this->db->insert('posts', $data);
         return $this->db->insert_id();
