@@ -292,5 +292,26 @@ public function fetch_posts()
         'current_page' => $page,
     ]);
 }
+public function search() {
+    $keyword = trim($this->input->get('q')); 
+    $page = $this->input->get('page') ?? 1;
+    $per_page = 10;
+    $offset = ($page - 1) * $per_page;
+
+    if ($keyword === '') {
+        $data['posts'] = [];
+        $data['total_pages'] = 0;
+        $data['current_page'] = 1;
+        $data['keyword'] = '';
+    } else {
+        $data['posts'] = $this->Posts_model->search_by_title($keyword, $offset, $per_page);
+        $total = $this->Posts_model->search_count($keyword);
+        $data['total_pages'] = ceil($total / $per_page);
+        $data['current_page'] = $page;
+        $data['keyword'] = $keyword;
+    }
+
+    $this->load->view('main/result', $data);
+}
 
 }

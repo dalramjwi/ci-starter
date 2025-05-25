@@ -123,6 +123,34 @@ public function get_total_count()
 {
     return $this->db->count_all('posts');
 }
+public function search_by_title($keyword, $offset, $limit) {
+    $keyword = trim($keyword);
+    if ($keyword === '') {
+        return [];
+    }
+
+    return $this->db
+        ->select('posts.*, path.path')
+        ->from('posts')
+        ->join('path', 'posts.post_id = path.post_id')
+        ->like('posts.title', $keyword)
+        ->order_by('posts.group_id', 'DESC')
+        ->order_by('path.path', 'ASC')
+        ->limit($limit, $offset)
+        ->get()
+        ->result();
+}
+
+public function search_count($keyword) {
+    $keyword = trim($keyword);
+    if ($keyword === '') {
+        return 0;
+    }
+
+    return $this->db
+        ->like('title', $keyword)
+        ->count_all_results('posts');
+}
 
 
 }
