@@ -24,7 +24,7 @@ public function index()
     $limit = 10;
     $offset = 0;
 
-    $all_posts = $this->Posts_model->get_all($offset, $limit);
+    $all_posts = $this->Posts_model->get_posts($offset, $limit);
     $total_count = $this->Posts_model->get_total_count();
 
     $data = [
@@ -299,7 +299,8 @@ public function search() {
         $data['current_page'] = 1;
         $data['keyword'] = '';
     } else {
-        $data['posts'] = $this->Posts_model->search_by_title($keyword, $offset, $per_page);
+        // $data['posts'] = $this->Posts_model->search_by_title($keyword, $offset, $per_page);
+        $data['posts'] = $this->Posts_model->get_posts($offset, $per_page, $keyword);
         $total = $this->Posts_model->search_count($keyword);
         $data['total_pages'] = ceil($total / $per_page);
         $data['current_page'] = $page;

@@ -11,25 +11,6 @@ public function get_only_base_limit($limit = 10)
         ->result();
 }
 
-// public function get_all($offset = 0, $limit = 10)
-// {
-//     return $this->db
-//         ->order_by('created_at', 'DESC')
-//         ->limit($limit, $offset)
-//         ->get('posts')
-//         ->result();
-// }
-// public function get_all($offset = 0, $limit = 10)
-// {
-//     return $this->db
-//         ->select('posts.*, path.path')
-//         ->from('posts')
-//         ->join('path', 'posts.post_id = path.post_id')
-//         ->order_by('path.path', 'ASC')  // 계층 구조 순서대로 정렬
-//         ->limit($limit, $offset)
-//         ->get()
-//         ->result();
-// }
 public function get_all($offset, $limit)
 {
     return $this->db
@@ -43,6 +24,24 @@ public function get_all($offset, $limit)
         ->result();
 }
 
+public function get_posts($offset, $limit, $keyword = null)
+{
+    $this->db
+        ->select('posts.*, path.path')
+        ->from('posts')
+        ->join('path', 'posts.post_id = path.post_id');
+
+    if (!empty($keyword)) {
+        $this->db->like('posts.title', trim($keyword));
+    }
+
+    return $this->db
+        ->order_by('posts.group_id', 'DESC')
+        ->order_by('path.path', 'ASC')
+        ->limit($limit, $offset)
+        ->get()
+        ->result();
+}
 
     // 최상위 게시글만 조회 (depth = 0)
     public function get_only_base()
@@ -53,22 +52,6 @@ public function get_all($offset, $limit)
             ->get('posts')
             ->result();
     }
-
-    // // 게시글 단건 조회
-    // public function get_post($post_id)
-    // {
-    //     return $this->db
-    //         ->where('post_id', $post_id)
-    //         ->get('posts')
-    //         ->row();
-    // }
-
-    // 게시글 등록
-    // public function insert($data)
-    // {
-    //     $this->db->insert('posts', $data);
-    //     return $this->db->insert_id();  // insert된 ID 리턴
-    // }
 
     // 게시글 수정
     public function update_post($post_id, $data)
