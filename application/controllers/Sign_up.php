@@ -34,7 +34,9 @@ class Sign_up extends MY_Controller
         if ($result) {
             redirect('/login/index');
         } else {
-            echo "회원가입 실패";
+            //todo 회원가입 실패 처리 현재 제대로 의도한대로 작동 안하고 있음. 추후에 수정 필요
+        echo "<script>alert('회원가입이 실패했습니다.'); location.href = '" . base_url('sign_up') . "';</script>";
+        exit;
         }
     }
 
