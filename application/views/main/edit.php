@@ -6,7 +6,7 @@
         <label for="title">제목</label><br>
         <input type="text" name="title" id="title" value="<?php echo htmlspecialchars($post->title); ?>" required><br><br>
     <?php else: ?>
-        <p>댓글 수정</p>
+        <p>답글 수정</p>
     <?php endif; ?>
 
     <label for="content">내용</label><br>
