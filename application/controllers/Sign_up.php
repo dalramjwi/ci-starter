@@ -6,16 +6,14 @@ class Sign_up extends MY_Controller
     public function __construct()
     {
         parent::__construct();
-        $this->load->model('Users_model'); // 회원 관련된 데이터 모델
+        $this->setCommonVars();
+        $this->load->model('Users_model');
     }
 
     // 회원가입 폼을 보여주는 메서드
     public function index()
     {
-        $data['title'] = '회원가입';
-        $this->load->view('templates/header', $data);
-        $this->load->view('sign_up/index', $data);
-        $this->load->view('templates/footer');
+        $this->render('sign_up/index');
     }
 
     // 회원가입 요청 처리 (폼 제출 처리)
@@ -23,6 +21,13 @@ class Sign_up extends MY_Controller
     {
         $user_id = $this->input->post('user_id');
         $user_pw = $this->input->post('user_pw');
+        //아이디 중복 체크
+        $exists = $this->Users_model->get_by_user_id($user_id);
+        if ($exists) {
+            $existing_id = $exists->user_id;  // 또는 배열이면 $exists['user_id']
+            echo "<script>alert('$existing_id 는 이미 존재하는 아이디입니다.'); location.href = '" . base_url('sign_up') . "';</script>";
+            exit;
+        }
 
         $data = [
             'user_id' => $user_id,
@@ -34,7 +39,6 @@ class Sign_up extends MY_Controller
         if ($result) {
             redirect('/login/index');
         } else {
-            //todo 회원가입 실패 처리 현재 제대로 의도한대로 작동 안하고 있음. 추후에 수정 필요
         echo "<script>alert('회원가입이 실패했습니다.'); location.href = '" . base_url('sign_up') . "';</script>";
         exit;
         }

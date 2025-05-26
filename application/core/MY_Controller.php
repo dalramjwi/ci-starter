@@ -107,7 +107,8 @@ class MY_Controller extends CI_Controller
         $aVars = array(
             'sitename' => '멋진 사이트',
             'writepagename' => '글쓰기 페이지',
-            'login' => '로그인'
+            'login' => '로그인',
+            'sign_up' => '회원가입'
         );
 
         $this->load->vars($aVars);

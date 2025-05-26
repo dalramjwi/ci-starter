@@ -1,6 +1,6 @@
 <?php
 class Users_model extends CI_Model {
-  protected $table = 'users';  // 테이블 이름
+  protected $table = 'users';
 
   public function __construct()
   {
@@ -13,7 +13,8 @@ class Users_model extends CI_Model {
   {
     return $this->db->insert($this->table, $data);
   }
-    public function get_by_user_id($user_id)
+  //로그인 시 id 확인
+  public function get_by_user_id($user_id)
   {
       return $this->db->get_where('users', ['user_id' => $user_id])->row();
   }
