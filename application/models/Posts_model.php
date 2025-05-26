@@ -33,12 +33,12 @@ public function get_only_base_limit($limit = 10)
 public function get_all($offset, $limit)
 {
     return $this->db
-        ->select('posts.*, path.path')
-        ->from('posts')
-        ->join('path', 'posts.post_id = path.post_id')
-        ->order_by('posts.group_id', 'DESC')  // 최신글 순서로 본글 정렬
-        ->order_by('path.path', 'ASC')        // 본글 내 답글은 경로 오름차순 정렬 (계층형)
-        ->limit($limit, $offset)
+        ->select('posts.*, path.path') //posts 테이블 전체와 path의 path 컬럼 선택
+        ->from('posts') // posts 테이블을 기준으로
+        ->join('path', 'posts.post_id = path.post_id') //path 테이블을 post_id 기준으로 합침
+        ->order_by('posts.group_id', 'DESC')  // group_id 기준 최신글 순서로 본글 정렬
+        ->order_by('path.path', 'ASC')        // path 기준 답글은 경로 오름차순 정렬 (계층형)
+        ->limit($limit, $offset) // 몇개까지, 어디서부터 보여줄지 지정
         ->get()
         ->result();
 }
