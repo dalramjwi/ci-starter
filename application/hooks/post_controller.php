@@ -22,6 +22,8 @@ class post_controller
 
     private function _view()
     {
+        // $this->ci->output->enable_profiler(true);
+
         # 공통 레이아웃 (header, footer 있음)
         if ($this->ci->template_->defined('layout_common')) {
             /* layout 파일 정의 */
@@ -39,14 +41,14 @@ class post_controller
 
             # 기본 레이아웃 (header, footer 없음)
         } else if ($this->ci->template_->defined('layout_empty')) {
-            $this->ci->output->enable_profiler(false);
+            // $this->ci->output->enable_profiler(false);
             $this->ci->template_->viewDefine('layout', 'common/layout_empty.tpl');
             $this->ci->template_->viewAssign($this->ci->optimizer->makeOptimizerScriptTag());
 
             $this->ci->template_->viewPrint('layout');
 
         } else {
-            $this->ci->output->enable_profiler(false);
+            // $this->ci->output->enable_profiler(false);
         }
     }
 
