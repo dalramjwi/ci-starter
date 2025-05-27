@@ -16,19 +16,47 @@ class Main extends MY_Controller
         $this->load->model('Path_model');
         $this->load->helper('utility_helper');
     }
+    // 게시글 데이터를 준비하는 메서드
+    private function prepare_post_data($offset, $limit, $keyword = null)
+    {
+        $posts = $this->Posts_model->get_posts($offset, $limit, $keyword);
+        $total = $keyword ? $this->Posts_model->search_count($keyword) : $this->Posts_model->get_total_count();
+
+        return [
+            'posts' => $posts,
+            'total_count' => $total,
+            'total_pages' => ceil($total / $limit),
+        ];
+    }
+
     // 메인 페이지
     public function index()
     {
         $limit = 10;
         $offset = 0;
-        $all_posts = $this->Posts_model->get_posts($offset, $limit);
-        $total_count = $this->Posts_model->get_total_count();
-        $data = [
-            'posts' => $all_posts,
-            'total_count' => $total_count,
-            'limit' => $limit,
-            'current_page' => 1,
-        ];
+        $data = $this->prepare_post_data($offset, $limit);
+
+        $data['limit'] = $limit;
+        $data['current_page'] = 1;
+        $data['keyword'] = '';
+        $this->render('main/index', $data);
+    }
+    
+    public function search() 
+    {
+        $keyword = trim($this->input->get('q'));
+        $page = $this->input->get('page') ?? 1;
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+
+        $data = ($keyword === '')
+            ? ['posts' => [], 'total_pages' => 0, 'total_count' => 0]
+            : $this->prepare_post_data($offset, $limit, $keyword);
+
+        $data['limit'] = $limit;
+        $data['current_page'] = $page;
+        $data['keyword'] = $keyword;
+
         $this->render('main/index', $data);
     }
     // 게시글 목록을 AJAX로 불러오는 메서드
@@ -38,9 +66,15 @@ class Main extends MY_Controller
         $limit = isset($input['page_option']) ? (int)$input['page_option'] : 10;
         $page = isset($input['page']) ? (int)$input['page'] : 1;
         $offset = ($page - 1) * $limit;
+        $keyword = isset($input['keyword']) ? trim($input['keyword']) : null;
 
-        $posts = $this->Posts_model->get_all($offset, $limit);
-        $total_count = $this->Posts_model->get_total_count();
+        if ($keyword) {
+            $posts = $this->Posts_model->get_posts($offset, $limit, $keyword);
+            $total_count = $this->Posts_model->search_count($keyword);
+        } else {
+            $posts = $this->Posts_model->get_all($offset, $limit);
+            $total_count = $this->Posts_model->get_total_count();
+        }
 
         $total_pages = ceil($total_count / $limit);
 
@@ -52,6 +86,8 @@ class Main extends MY_Controller
             'current_page' => $page,
         ]);
     }
+
+
     public function view($post_id)
     {
         // 게시글 상세보기
@@ -225,30 +261,5 @@ public function delete($post_id)
                 </script>";
         }
     }
-
-
-
-public function search() {
-    $keyword = trim($this->input->get('q')); 
-    $page = $this->input->get('page') ?? 1;
-    $per_page = 10;
-    $offset = ($page - 1) * $per_page;
-
-    if ($keyword === '') {
-        $data['posts'] = [];
-        $data['total_pages'] = 0;
-        $data['current_page'] = 1;
-        $data['keyword'] = '';
-    } else {
-        // $data['posts'] = $this->Posts_model->search_by_title($keyword, $offset, $per_page);
-        $data['posts'] = $this->Posts_model->get_posts($offset, $per_page, $keyword);
-        $total = $this->Posts_model->search_count($keyword);
-        $data['total_pages'] = ceil($total / $per_page);
-        $data['current_page'] = $page;
-        $data['keyword'] = $keyword;
-    }
-
-    $this->load->view('main/result', $data);
-}
 
 }

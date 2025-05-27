@@ -44,10 +44,19 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function fetchPosts(page, limit) {
+    const bodyData = {
+      page_option: limit,
+      page: page,
+    };
+
+    if (window.keyword) {
+      bodyData.keyword = window.keyword;
+    }
+
     fetch(window.fetchPostsUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ page_option: limit, page: page }),
+      body: JSON.stringify(bodyData),
     })
       .then((response) => response.json())
       .then((data) => {
