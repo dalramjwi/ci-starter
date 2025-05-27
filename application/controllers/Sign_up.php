@@ -24,7 +24,7 @@ class Sign_up extends MY_Controller
         //아이디 중복 체크
         $exists = $this->Users_model->get_by_user_id($user_id);
         if ($exists) {
-            $existing_id = $exists->user_id;  // 또는 배열이면 $exists['user_id']
+            $existing_id = $exists->user_id;
             echo "<script>alert('$existing_id 는 이미 존재하는 아이디입니다.'); location.href = '" . base_url('sign_up') . "';</script>";
             exit;
         }
