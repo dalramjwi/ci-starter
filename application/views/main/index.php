@@ -21,6 +21,16 @@
     <input type="text" name="q" placeholder="검색어 입력" value="<?php echo htmlspecialchars($keyword ?? ''); ?>">
     <button type="submit">검색</button>
 </form>
+<!-- 게시판 카테고리 설정 -->
+<div class="category_list_container">
+    <?php foreach ($categories as $category): ?>
+            <div class="category_item"
+                 data-id="<?= $category->category_id ?>">
+                <?= htmlspecialchars($category->name) ?>
+            </div>
+    <?php endforeach; ?>
+</div>
+
 <!-- 게시글 랜더링 -->
 <div id="post_list">
     <?php $this->load->view('main/post_list', ['posts' => $posts]); ?>

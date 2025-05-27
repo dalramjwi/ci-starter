@@ -35,8 +35,11 @@ class Main extends MY_Controller
     {
         $limit = 10;
         $offset = 0;
+
+        $categories = $this->Categories_model->get_all_categories();
         $data = $this->prepare_post_data($offset, $limit);
 
+        $data['categories'] = $categories;
         $data['limit'] = $limit;
         $data['current_page'] = 1;
         $data['keyword'] = '';
