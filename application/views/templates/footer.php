@@ -1,4 +1,4 @@
 
-    <em>&copy; 예람</em>
+    <em>&copy; <?php echo $company_name; ?></em>
     </body>
 </html>

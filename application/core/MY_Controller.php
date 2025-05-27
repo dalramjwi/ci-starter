@@ -105,9 +105,11 @@ class MY_Controller extends CI_Controller
     public function setCommonVars()
     {
         $aVars = array(
-            'sitename' => '멋진 사이트',
+            'company_name' => '예람',
+            'site_name' => 'ㅎ.ㅎ',
             'writepagename' => '글쓰기 페이지',
             'login' => '로그인',
+            'logout' => '로그아웃',
             'sign_up' => '회원가입'
         );
 
