@@ -3,6 +3,7 @@
         <meta charset="UTF-8">
         <title><?php echo $site_name; ?></title>
         <link rel="stylesheet" href="<?php echo assets_url();?>css/header.css">
+    <script type="module" src="<?php echo assets_url();?>js/header.js"></script>
     </head>
     <body>
 
