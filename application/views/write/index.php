@@ -4,6 +4,8 @@
         <div>
             <select name="category" required>
                 <?php foreach ($categories as $category): ?>
+                    <!-- can_write 속성이 false인 카테고리는 제외 -->
+                    <?php if (!$category->can_write) continue; ?>
                     <option value="<?php echo htmlspecialchars($category->category_id); ?>"
                         <?php if ($category->category_id == 2) echo 'selected'; ?>>
                         <?php echo htmlspecialchars($category->name); ?>
