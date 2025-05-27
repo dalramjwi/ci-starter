@@ -8,7 +8,7 @@ class Main extends MY_Controller
         parent::__construct();
         
         // 공통 변수 설정
-        $this->setCommonVars(); 
+        $this->setCommonVars();
         
         $this->load->model('Posts_model');
         $this->load->model('Comments_model');
@@ -16,30 +16,21 @@ class Main extends MY_Controller
         $this->load->model('Path_model');
         $this->load->helper('utility_helper');
     }
-
-public function index()
-
-{
-    $data['title'] = '계층형 게시판 테스트';
-    $limit = 10;
-    $offset = 0;
-
-    $all_posts = $this->Posts_model->get_posts($offset, $limit);
-    $total_count = $this->Posts_model->get_total_count();
-
-    $data = [
-        'posts' => $all_posts,
-        'total_count' => $total_count,
-        'limit' => $limit,
-        'current_page' => 1,
-    ];
-
-    $this->load->view('templates/header', $data);
-    $this->load->view('main/index', $data);
-    $this->load->view('templates/footer');
-
-
-}
+    // 메인 페이지
+    public function index()
+    {
+        $limit = 10;
+        $offset = 0;
+        $all_posts = $this->Posts_model->get_posts($offset, $limit);
+        $total_count = $this->Posts_model->get_total_count();
+        $data = [
+            'posts' => $all_posts,
+            'total_count' => $total_count,
+            'limit' => $limit,
+            'current_page' => 1,
+        ];
+        $this->render('main/index', $data);
+    }
 
     public function view($post_id)
     {
