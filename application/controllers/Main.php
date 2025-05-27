@@ -31,7 +31,27 @@ class Main extends MY_Controller
         ];
         $this->render('main/index', $data);
     }
+    // 게시글 목록을 AJAX로 불러오는 메서드
+    public function fetch_posts()
+    {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $limit = isset($input['page_option']) ? (int)$input['page_option'] : 10;
+        $page = isset($input['page']) ? (int)$input['page'] : 1;
+        $offset = ($page - 1) * $limit;
 
+        $posts = $this->Posts_model->get_all($offset, $limit);
+        $total_count = $this->Posts_model->get_total_count();
+
+        $total_pages = ceil($total_count / $limit);
+
+        $html = $this->load->view('main/post_list', ['posts' => $posts], true);
+
+        echo json_encode([
+            'html' => $html,
+            'total_pages' => $total_pages,
+            'current_page' => $page,
+        ]);
+    }
     public function view($post_id)
     {
         // 게시글 상세보기
@@ -207,27 +227,7 @@ public function delete($post_id)
     }
 
 
-public function fetch_posts()
-{
-    $input = json_decode(file_get_contents('php://input'), true);
 
-    $limit = isset($input['page_option']) ? (int)$input['page_option'] : 10;
-    $page = isset($input['page']) ? (int)$input['page'] : 1;
-    $offset = ($page - 1) * $limit;
-
-    $posts = $this->Posts_model->get_all($offset, $limit);
-    $total_count = $this->Posts_model->get_total_count();
-
-    $total_pages = ceil($total_count / $limit);
-
-    $html = $this->load->view('main/post_list', ['posts' => $posts], true);
-
-    echo json_encode([
-        'html' => $html,
-        'total_pages' => $total_pages,
-        'current_page' => $page,
-    ]);
-}
 public function search() {
     $keyword = trim($this->input->get('q')); 
     $page = $this->input->get('page') ?? 1;
