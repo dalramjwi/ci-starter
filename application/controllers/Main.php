@@ -89,7 +89,7 @@ class Main extends MY_Controller
         $data['comments'] = $this->Comments_model->get_comments_by_post($post_id);
         $this->render('main/view', $data);
     }
-    //게시글 수정 메서드드
+    //게시글 수정 메서드
     public function edit ($post_id)
     {
         $data['post'] = $this->Posts_model->get_post($post_id);
