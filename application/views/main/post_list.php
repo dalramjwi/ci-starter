@@ -1,4 +1,4 @@
-<div>No. 제목 글쓴이 작성 시간</div>
+<div>No. 제목 작성자 작성일</div>
 <?php if (empty($posts)): ?>
     <p>게시물이 없습니다.</p>
 <?php else: ?>

@@ -44,7 +44,11 @@ class Posts_model extends CI_Model {
             ->get('posts')
             ->result();
     }
-
+    // 게시글 정보 가져오기
+    public function get_post($post_id)
+    {
+        return $this->db->get_where('posts', ['post_id' => $post_id])->row();
+    }
     // 게시글 수정
     public function update_post($post_id, $data)
     {
@@ -69,11 +73,7 @@ class Posts_model extends CI_Model {
         return $this->db->insert_id();
     }
 
-    // 게시글 정보 가져오기
-    public function get_post($post_id)
-    {
-        return $this->db->get_where('posts', ['post_id' => $post_id])->row();
-    }
+
     public function update_group_id($post_id, $group_id)
     {
         $this->db->where('post_id', $post_id);

@@ -79,18 +79,12 @@ class Main extends MY_Controller
             'current_page' => $page,
         ]);
     }
-
-
+    // 게시글 작성 페이지
     public function view($post_id)
     {
-        // 게시글 상세보기
-        $data['title'] = '게시글 상세보기';
         $data['post'] = $this->Posts_model->get_post($post_id);
-        $data['comments'] = $this->Comments_model->get_comments_by_post($post_id); // 댓글 조회
-        // 뷰 로드
-        $this->load->view('templates/header', $data);
-        $this->load->view('main/view', $data);
-        $this->load->view('templates/footer');
+        $data['comments'] = $this->Comments_model->get_comments_by_post($post_id);
+        $this->render('main/view', $data);
     }
     public function edit ($post_id)
     {
