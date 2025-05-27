@@ -216,56 +216,6 @@ public function delete($post_id)
     }
 
 
-public function reply($parent_id)
-{
-    $user_id = $this->session->userdata('user_id');
-    $title = $this->input->post('title');
-    $content = $this->input->post('reply');
-
-    // 부모 정보 가져오기 (depth, path)
-    $parent = $this->Posts_model->get_post($parent_id);
-    $parent_path = $this->Path_model->get_path($parent_id); // ex: "0001/0012"
-    $parent_depth = $parent->depth;
-
-    // 최상위 부모 찾기 (답글 작성 시 group_id로 넣기 위함)
-    $top_ancestor = $this->Posts_closure_model->get_top_ancestor($parent_id);
-    $group_id = $top_ancestor->ancestor;
-
-
-    // 제목 자동 생성
-    if (empty(trim($title))) {
-        $title = $parent->title . '의 답글입니다';
-    }
-    // posts에 insert
-    $data = [
-        'user_id' => $user_id,
-        'title' => $title,
-        'content' => $content,
-        'created_at' => date('Y-m-d H:i:s'),
-        'depth' => $parent_depth + 1,
-        'group_id' => $group_id 
-    ];
-    $insert_id = $this->Posts_model->insert($data);
-
-    // closure: 자기 자신
-    $this->Posts_closure_model->insert($insert_id, $insert_id, 0);
-
-    // closure: 부모의 모든 조상을 조회해서 추가
-    $ancestors = $this->Posts_closure_model->get_ancestors($parent_id); 
-    foreach ($ancestors as $ancestor) {
-        $this->Posts_closure_model->insert($ancestor->ancestor, $insert_id, $ancestor->depth + 1);
-    }
-
-    // path: 부모 path + '/' + base62(post_id)
-    $base62_id = base62_encode($insert_id);
-    $path = $parent_path . '/' . $base62_id;
-    $this->Path_model->insert($insert_id, $path);
-
-    redirect('/main/index');
-}
-
-
-
 public function fetch_posts()
 {
     $input = json_decode(file_get_contents('php://input'), true);
