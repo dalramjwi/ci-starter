@@ -41,7 +41,7 @@ class Main extends MY_Controller
         $data['keyword'] = '';
         $this->render('main/index', $data);
     }
-    
+    // 게시글 검색
     public function search() 
     {
         $keyword = trim($this->input->get('q'));
@@ -68,21 +68,14 @@ class Main extends MY_Controller
         $offset = ($page - 1) * $limit;
         $keyword = isset($input['keyword']) ? trim($input['keyword']) : null;
 
-        if ($keyword) {
-            $posts = $this->Posts_model->get_posts($offset, $limit, $keyword);
-            $total_count = $this->Posts_model->search_count($keyword);
-        } else {
-            $posts = $this->Posts_model->get_all($offset, $limit);
-            $total_count = $this->Posts_model->get_total_count();
-        }
+        $result = $this->prepare_post_data($offset, $limit, $keyword);
 
-        $total_pages = ceil($total_count / $limit);
+        $html = $this->load->view('main/post_list', ['posts' => $result['posts']], true);
 
-        $html = $this->load->view('main/post_list', ['posts' => $posts], true);
-
+        // JSON으로 응답
         echo json_encode([
             'html' => $html,
-            'total_pages' => $total_pages,
+            'total_pages' => $result['total_pages'],
             'current_page' => $page,
         ]);
     }
