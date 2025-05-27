@@ -10,13 +10,16 @@ class Write extends MY_Controller
         $this->load->model('Posts_model');
         $this->load->model('Posts_closure_model');
         $this->load->model('Path_model');
+        $this->load->model('Categories_model');
         $this->load->helper('utility_helper');
     }
 
     // 게시글 작성 화면 메서드
     public function index()
     {
-        $this->render('write/index');
+        $categories = $this->Categories_model->get_all_categories();
+        $data = ['categories' => $categories];
+        $this->render('write/index', $data);
     }
     // 게시글 작성 요청 처리 메서드
     public function wrote()
@@ -25,6 +28,8 @@ class Write extends MY_Controller
         $title = $this->input->post('title');
         $content = $this->input->post('content');
         $parent_id = $this->input->post('parent_id'); // 있으면 답글, 없으면 본글
+        $category_id = $this->input->post('category'); // 추가: 카테고리 받기
+
 
         if (empty($parent_id)) {
             // === 본글 작성 ===
@@ -35,7 +40,8 @@ class Write extends MY_Controller
                 'content' => $content,
                 'created_at' => date('Y-m-d H:i:s'),
                 'depth' => 0,
-                'group_id' => 0
+                'group_id' => 0,
+                'category_id' => $category_id
             ];
 
             $insert_id = $this->Posts_model->insert($data);
@@ -69,7 +75,9 @@ class Write extends MY_Controller
                 'content' => $content,
                 'created_at' => date('Y-m-d H:i:s'),
                 'depth' => $parent_depth + 1,
-                'group_id' => $group_id
+                'group_id' => $group_id,
+                'category_id' => $category_id
+
             ];
 
             $insert_id = $this->Posts_model->insert($data);

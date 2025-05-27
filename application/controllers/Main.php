@@ -14,6 +14,7 @@ class Main extends MY_Controller
         $this->load->model('Comments_model');
         $this->load->model('Posts_closure_model');
         $this->load->model('Path_model');
+        $this->load->model('Categories_model');
         $this->load->helper('utility_helper');
     }
     // 게시글 데이터를 준비하는 메서드
