@@ -37,11 +37,13 @@
 <div class="reply-modal" id="replyModal">
     <div class="reply-modal-content">
         <span class="reply-close-btn">&times;</span>
-        <form action="<?php echo base_url('main/reply/' . $post->post_id); ?>" method="post" class="reply-form">
-            <input type="text" name="title" placeholder="제목 미작성 시 자동으로 작성됩니다." class="reply-input-title">
-            <textarea name="reply" required placeholder="답글 내용을 입력하세요." class="reply-textarea"></textarea>
+        <form action="<?php echo base_url('write/wrote'); ?>" method="post" class="reply-form">
+            <input type="hidden" name="parent_id" value="<?php echo $post->post_id; ?>">
+            <input type="text" name="title" placeholder="제목 미작성 시 자동 생성됩니다." class="reply-input-title">
+            <textarea name="content" required placeholder="답글 내용을 입력하세요." class="reply-textarea"></textarea>
             <button type="submit" class="reply-submit">답글 작성</button>
         </form>
+
     </div>
 </div>
 

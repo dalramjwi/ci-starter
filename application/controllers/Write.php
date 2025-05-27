@@ -24,31 +24,69 @@ class Write extends MY_Controller
         $user_id = $this->session->userdata('user_id');
         $title = $this->input->post('title');
         $content = $this->input->post('content');
+        $parent_id = $this->input->post('parent_id'); // 있으면 답글, 없으면 본글
 
-        // 최상위 글 작성
-        $data = [
-            'user_id' => $user_id,
-            'title' => $title,
-            'content' => $content,
-            'created_at' => date('Y-m-d H:i:s'),
-            'depth' => 0,
-            'group_id' => 0  // 일단 0으로 처리 후 후처리
-        ];
+        if (empty($parent_id)) {
+            // === 본글 작성 ===
 
-        // posts 테이블에 저장 및 새 post_id 받기
-        $insert_id = $this->Posts_model->insert($data);
+            $data = [
+                'user_id' => $user_id,
+                'title' => $title,
+                'content' => $content,
+                'created_at' => date('Y-m-d H:i:s'),
+                'depth' => 0,
+                'group_id' => 0
+            ];
 
-        // insert_id로 group_id 업데이트
-        $this->Posts_model->update_group_id($insert_id, $insert_id);
+            $insert_id = $this->Posts_model->insert($data);
+            $this->Posts_model->update_group_id($insert_id, $insert_id);
 
-        // 클로저 테이블에 자기 자신 관계 (depth 0)
-        $this->Posts_closure_model->insert($insert_id, $insert_id, 0);
+            // 클로저: 자기 자신
+            $this->Posts_closure_model->insert($insert_id, $insert_id, 0);
 
-        // path 경로는 post_id를 base62로 인코딩해서 문자열 생성 (최상위 글이라서 단일 path)
-        $path = base62_encode($insert_id);
+            // path: 최상위 글이니까 base62(post_id)만
+            $path = base62_encode($insert_id);
+            $this->Path_model->insert($insert_id, $path);
 
-        // path 테이블에 저장
-        $this->Path_model->insert($insert_id, $path);
+        } else {
+            // === 답글 작성 ===
+
+            $parent = $this->Posts_model->get_post($parent_id);
+            $parent_path = $this->Path_model->get_path($parent_id);
+            $parent_depth = $parent->depth;
+
+            $top_ancestor = $this->Posts_closure_model->get_top_ancestor($parent_id);
+            $group_id = $top_ancestor->ancestor;
+
+            // 제목 자동 생성
+            if (empty(trim($title))) {
+                $title = $parent->title . '의 답글입니다';
+            }
+
+            $data = [
+                'user_id' => $user_id,
+                'title' => $title,
+                'content' => $content,
+                'created_at' => date('Y-m-d H:i:s'),
+                'depth' => $parent_depth + 1,
+                'group_id' => $group_id
+            ];
+
+            $insert_id = $this->Posts_model->insert($data);
+
+            // 클로저: 자기 자신
+            $this->Posts_closure_model->insert($insert_id, $insert_id, 0);
+
+            // 클로저: 조상들 → 현재 글로 관계 생성
+            $ancestors = $this->Posts_closure_model->get_ancestors($parent_id);
+            foreach ($ancestors as $ancestor) {
+                $this->Posts_closure_model->insert($ancestor->ancestor, $insert_id, $ancestor->depth + 1);
+            }
+
+            // path: 부모 path + '/' + base62(post_id)
+            $path = $parent_path . '/' . base62_encode($insert_id);
+            $this->Path_model->insert($insert_id, $path);
+        }
 
         redirect('/main');
     }
