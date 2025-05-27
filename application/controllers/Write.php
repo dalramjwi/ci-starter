@@ -6,29 +6,26 @@ class Write extends MY_Controller
     public function __construct()
     {
         parent::__construct();
+        $this->setCommonVars(); 
         $this->load->model('Posts_model');
         $this->load->model('Posts_closure_model');
         $this->load->model('Path_model');
         $this->load->helper('utility_helper');
     }
 
-        // 게시글 작성 화면 메서드 
+    // 게시글 작성 화면 메서드
     public function index()
     {
-        $data['title'] = '게시판';
-        $data['write'] = '글쓰기';
-        $this->load->view('templates/header', $data);
-        $this->load->view('write/index', $data);
-        $this->load->view('templates/footer');
+        $this->render('write/index');
     }
-
+    // 게시글 작성 요청 처리 메서드
     public function wrote()
     {
         $user_id = $this->session->userdata('user_id');
         $title = $this->input->post('title');
         $content = $this->input->post('content');
 
-        // 최상위 글 작성 (답글 X)
+        // 최상위 글 작성
         $data = [
             'user_id' => $user_id,
             'title' => $title,

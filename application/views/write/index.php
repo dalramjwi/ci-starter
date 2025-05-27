@@ -7,6 +7,6 @@
         <textarea name="content" required></textarea><br>
     </form>
     <div class="write_submit_btn">
-        <button type="submit" form="write_form"><?php echo $write; ?></button>
+        <button type="submit" form="write_form">글 작성</button>
     </div>
 </div>
