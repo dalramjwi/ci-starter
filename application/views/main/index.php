@@ -23,11 +23,9 @@
 </form>
 <!-- 게시판 카테고리 설정 -->
 <div class="category_list_container">
+    <div class="category_total">전체</div>
     <?php foreach ($categories as $category): ?>
-            <div class="category_item"
-                 data-id="<?= $category->category_id ?>">
-                <?= htmlspecialchars($category->name) ?>
-            </div>
+        <div class="category_<?php echo $category->category_id; ?>"><?php echo htmlspecialchars($category->name); ?></div>
     <?php endforeach; ?>
 </div>
 

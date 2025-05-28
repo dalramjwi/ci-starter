@@ -450,3 +450,15 @@ header {
   flex-direction: column;
   align-items: flex-end;
 }
+.category_list_container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 20px;
+  justify-content: space-around;
+}
+.category_list_container > div:hover {
+  background-color: #d3d3d3;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
