@@ -17,10 +17,12 @@
     </div>
 </div>
 <!-- 검색 필드 -->
-<form id="searchForm" method="get" action="<?php echo base_url('main/search'); ?>">
-    <input type="text" name="q" placeholder="검색어 입력" value="<?php echo htmlspecialchars($keyword ?? ''); ?>">
-    <button type="submit">검색</button>
-</form>
+ <div class="search_div">
+     <form id="searchForm" method="get" action="<?php echo base_url('main/search'); ?>">
+         <input type="text" name="q" placeholder="검색어 입력" value="<?php echo htmlspecialchars($keyword ?? ''); ?>">
+         <button type="submit">검색</button>
+     </form>
+ </div>
 <!-- 게시판 카테고리 설정 -->
 <div class="category_list_container">
     <div class="category_total">전체</div>
