@@ -1,4 +1,8 @@
-<div>제목 작성자 작성일</div>
+<div>
+    <div>제목</div>
+    <div>작성자</div>
+    <div>작성일</div>
+</div>
 <?php if (empty($posts)): ?>
     <p>게시물이 없습니다.</p>
 <?php else: ?>
@@ -14,9 +18,14 @@
                     <?= htmlspecialchars($post->title) ?>
                 </a>
             </div>
-            <div style="font-size: 0.85em; color: #777;">
-                <?= $post->user_id ?>
-            </div>
+            <?php if ($category_id == 1): ?>
+                <div style="font-size: 0.85em; color: #777;">관리자</div>
+            <?php elseif ($category_id == 3): ?>
+                <div style="font-size: 0.85em; color: #777;"> </div>
+            <?php else: ?>
+                <div style="font-size: 0.85em; color: #777;"><?= $post->user_id ?></div>
+            <?php endif; ?>
+
             <div class="post-time" style="font-size: 0.85em; color: #777;">
                 <?= date('Y-m-d H:i', strtotime($post->created_at)) ?>
             </div>

@@ -5,7 +5,9 @@
 <div class="post-header">
     <div></div> <!-- 왼쪽 공간 비움 -->
     <div class="post-meta">
-        <span>작성자: <?php echo htmlspecialchars($post->user_id); ?></span>
+            <?php if ($category->can_view) { ?>
+                <span>작성자: <?php echo htmlspecialchars($post->user_id); ?></span>
+            <?php } ?>
         <span>작성일: <?php echo $post->created_at; ?></span>
     </div>
 </div>
@@ -16,8 +18,9 @@
 <!-- 수정/삭제/답글 버튼 줄 -->
 <?php if ($this->session->userdata('user_id')): ?>
     <div class="post-actions-row">
+    <?php if ($category->can_reply) { ?>
         <button class="reply-open-btn">답글 작성</button>
-
+    <?php } ?>
         <?php if ($this->session->userdata('user_id') == $post->user_id): ?>
             <div class="post-actions">
                 <a href="<?php echo base_url('main/edit/' . $post->post_id); ?>" class="post-btn-edit">수정</a>

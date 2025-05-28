@@ -14,7 +14,7 @@ class Categories_model extends CI_Model
     // 카테고리 하나 조회
     public function get_category($category_id)
     {
-        return $this->db->get_where($this->table, ['category_id' => $category_id])->row_array();
+        return $this->db->get_where($this->table, ['category_id' => $category_id])->row();
     }
 
     // 게시판 활동 권한 확인용

@@ -15,7 +15,10 @@ class Posts_model extends CI_Model {
         if (!empty($filters['category_id'])) {
             $this->db->where('posts.category_id', (int)$filters['category_id']);
         }
-
+        
+        if (!empty($filters['user_id'])) {
+            $this->db->where('posts.user_id', $filters['user_id']);
+        }
         return $this->db
             ->order_by('posts.group_id', 'DESC')
             ->order_by('path.path', 'ASC')
@@ -31,6 +34,10 @@ class Posts_model extends CI_Model {
 
         if (!empty($filters['category_id']) && $filters['category_id'] != 0) {
             $this->db->where('category_id', (int)$filters['category_id']);
+        }
+            
+        if (!empty($filters['user_id'])) {
+            $this->db->where('user_id', $filters['user_id']);
         }
 
         return $this->db->count_all_results('posts');

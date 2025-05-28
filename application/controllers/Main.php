@@ -22,11 +22,14 @@ class Main extends MY_Controller
     private function prepare_post_data($offset, $limit, $keyword = null, $category_id = 2)
     {
         $filters = [];
+        $user_id = $this->session->userdata('user_id');
 
         if (!empty($keyword)) {
             $filters['keyword'] = $keyword;
+            }
+        if ($category_id == 4 && $user_id) {
+            $filters['user_id'] = $user_id;
         }
-
 
         $filters['category_id'] = $category_id;
         $posts = $this->Posts_model->get_posts($offset, $limit, $filters);
@@ -52,6 +55,7 @@ class Main extends MY_Controller
         $data['limit'] = $limit;
         $data['current_page'] = 1;
         $data['keyword'] = '';
+        $data['category_id'] = 2;
         $this->render('main/index', $data);
     }
     // 게시글 검색
@@ -71,6 +75,8 @@ class Main extends MY_Controller
         $data['limit'] = $limit;
         $data['current_page'] = $page;
         $data['keyword'] = $keyword;
+        $data['category_id'] = 2;
+
 
         $this->render('main/index', $data);
     }
@@ -88,11 +94,15 @@ class Main extends MY_Controller
         $result = $this->prepare_post_data($offset, $limit, $keyword, $category_id);
 
         $html = $this->load->view('main/post_list', ['posts' => $result['posts']], true);
+        $html = $this->load->view('main/post_list', [
+            'posts' => $result['posts'],
+            'category_id' => $category_id
+        ], true);
 
         echo json_encode([
             'html' => $html,
             'total_pages' => $result['total_pages'],
-            'current_page' => $page,
+            'current_page' => $page
         ]);
     }
 
@@ -102,10 +112,19 @@ class Main extends MY_Controller
     // 게시글 작성 조회
     public function view($post_id)
     {
-        $data['post'] = $this->Posts_model->get_post($post_id);
+        $post = $this->Posts_model->get_post($post_id);
+        $data['post'] = $post;
         $data['comments'] = $this->Comments_model->get_comments_by_post($post_id);
+
+        if ($post) {
+            $category_id = $post->category_id;
+            $category = $this->Categories_model->get_category($category_id);
+            $data['category'] = $category;
+        }
+
         $this->render('main/view', $data);
     }
+
     //게시글 수정 메서드
     public function edit ($post_id)
     {
