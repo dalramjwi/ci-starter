@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const categoryListContent = window.categoryList;
   const fetchPostsUrl = window.fetchPostsUrl;
 
-  let currentCategoryId = 0; // 기본은 전체
+  let currentCategoryId = 2; // 기본은 자유
 
   const postList = document.getElementById("post_list");
   const pageOption = document.getElementById("page_option");
@@ -207,12 +207,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // 카테고리 리스트 생성
   function renderCategoryList(categories) {
     categoryList.innerHTML = "";
-
-    const allBtn = document.createElement("div");
-    allBtn.className = "category_0";
-    allBtn.textContent = "전체 조회";
-    allBtn.dataset.categoryId = 0;
-    categoryList.appendChild(allBtn);
 
     categories.forEach((cat) => {
       const btn = document.createElement("div");

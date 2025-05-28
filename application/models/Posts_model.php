@@ -12,7 +12,7 @@ class Posts_model extends CI_Model {
             $this->db->like('posts.title', trim($filters['keyword']));
         }
 
-        if (!empty($filters['category_id']) && $filters['category_id'] != 0) {
+        if (!empty($filters['category_id']) && $filters['category_id'] != 2) {
             $this->db->where('posts.category_id', (int)$filters['category_id']);
         }
 

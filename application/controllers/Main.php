@@ -19,7 +19,7 @@ class Main extends MY_Controller
     }
     // 게시글 데이터를 준비하는 메서드
 
-    private function prepare_post_data($offset, $limit, $keyword = null, $category_id = 0)
+    private function prepare_post_data($offset, $limit, $keyword = null, $category_id = 2)
     {
         $filters = [];
 
@@ -27,7 +27,7 @@ class Main extends MY_Controller
             $filters['keyword'] = $keyword;
         }
 
-        if ($category_id !== 0) {
+        if ($category_id !== 2) {
             $filters['category_id'] = $category_id;
         }
 
@@ -85,7 +85,7 @@ class Main extends MY_Controller
         $page = isset($input['page']) ? (int)$input['page'] : 1;
         $offset = ($page - 1) * $limit;
         $keyword = isset($input['keyword']) ? trim($input['keyword']) : null;
-        $category_id = isset($input['category_id']) ? (int)$input['category_id'] : 0;
+        $category_id = isset($input['category_id']) ? (int)$input['category_id'] : 2;
 
         $result = $this->prepare_post_data($offset, $limit, $keyword, $category_id);
 
