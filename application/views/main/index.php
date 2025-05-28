@@ -1,8 +1,8 @@
 <div class="write_div">
     <?php if ($this->session->userdata('user_id')): ?>
-        <div class="write_btn">
-            <a href="<?php echo base_url('write'); ?>">게시물 작성</a>
-        </div>
+    <a href="<?php echo base_url('write'); ?>" class="write_btn">
+        <div>게시물 작성</div>
+    </a>
     <?php endif; ?>
     <div class="main_select_div">
         <div class="page_select">

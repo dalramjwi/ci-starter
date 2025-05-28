@@ -210,7 +210,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const allBtn = document.createElement("div");
     allBtn.className = "category_0";
-    allBtn.textContent = "전체 게시판";
+    allBtn.textContent = "전체 조회";
     allBtn.dataset.categoryId = 0;
     categoryList.appendChild(allBtn);
 
