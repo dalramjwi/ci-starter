@@ -27,10 +27,8 @@ class Main extends MY_Controller
             $filters['keyword'] = $keyword;
         }
 
-        if ($category_id !== 2) {
-            $filters['category_id'] = $category_id;
-        }
 
+        $filters['category_id'] = $category_id;
         $posts = $this->Posts_model->get_posts($offset, $limit, $filters);
         $total = $this->Posts_model->count_posts($filters);
 
