@@ -52,11 +52,13 @@ class Main extends MY_Controller
         $page = $this->input->get('page') ?? 1;
         $limit = 10;
         $offset = ($page - 1) * $limit;
+        $categories = $this->Categories_model->get_all_categories();
 
         $data = ($keyword === '')
-            ? ['posts' => [], 'total_pages' => 0, 'total_count' => 0]
-            : $this->prepare_post_data($offset, $limit, $keyword);
-
+        ? ['posts' => [], 'total_pages' => 0, 'total_count' => 0]
+        : $this->prepare_post_data($offset, $limit, $keyword);
+        
+        $data['categories'] = $categories;
         $data['limit'] = $limit;
         $data['current_page'] = $page;
         $data['keyword'] = $keyword;
