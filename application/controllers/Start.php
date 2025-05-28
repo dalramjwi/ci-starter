@@ -1,6 +1,10 @@
 <?php
-class Start extends CI_Controller {
-
+class Start extends MY_Controller {
+        public function __construct()
+        {
+                parent::__construct();
+                $this->setCommonVars();
+        }
         public function index()
         {
                 $this->load->view('start/index');

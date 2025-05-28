@@ -26,10 +26,11 @@
               </div>
               <div id="view-container">
                 <div id="view-container2">
-                  <div class="text2">비로그인</div>
+                  <a href="<?php echo base_url('main/index'); ?>"><div class="text2">비로그인</div></a>
                   <div class="text-container">
-                    <div class="text2">로그인</div>
-                    <div class="text2">회원가입</div>
+                    <a href="<?php echo base_url('login'); ?>"><div class="text2"><?php echo $login; ?></div></a>
+                    <a href="<?php echo base_url('sign_up'); ?>"><div class="text2"><?php echo $sign_up; ?></div></a>
+                    
                   </div>
                 </div>
               </div>

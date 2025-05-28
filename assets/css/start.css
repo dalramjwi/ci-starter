@@ -5,7 +5,9 @@ body {
   overflow: hidden;
   background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
 }
-
+a {
+  text-decoration: none;
+}
 .tv-wrapper {
   position: absolute;
   top: 50%;
@@ -248,6 +250,8 @@ body {
   flex-direction: row-reverse;
   gap: 6rem;
   text-align: center;
+  position: relative;
+  z-index: 1000;
 }
 #view-container {
   display: none;
@@ -299,6 +303,9 @@ body {
     1px 22px 10px rgba(16, 16, 16, 0.2),
     1px 25px 35px rgba(16, 16, 16, 0.2),
     1px 30px 60px rgba(16, 16, 16, 0.4);
+}
+.text2:hover {
+  color: yellow;
 }
 .text-container {
   display: flex;
