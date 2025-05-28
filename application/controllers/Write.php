@@ -60,6 +60,7 @@ class Write extends MY_Controller
             $parent = $this->Posts_model->get_post($parent_id);
             $parent_path = $this->Path_model->get_path($parent_id);
             $parent_depth = $parent->depth;
+            $parent_category_id = $parent->category_id; // 부모 글의 카테고리 사용
 
             $top_ancestor = $this->Posts_closure_model->get_top_ancestor($parent_id);
             $group_id = $top_ancestor->ancestor;
@@ -76,7 +77,7 @@ class Write extends MY_Controller
                 'created_at' => date('Y-m-d H:i:s'),
                 'depth' => $parent_depth + 1,
                 'group_id' => $group_id,
-                'category_id' => $category_id
+                'category_id' => $parent_category_id
 
             ];
 
