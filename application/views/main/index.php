@@ -24,12 +24,7 @@
      </form>
  </div>
 <!-- 게시판 카테고리 설정 -->
-<div class="category_list_container">
-    <div class="category_total">전체</div>
-    <?php foreach ($categories as $category): ?>
-        <div class="category_<?php echo $category->category_id; ?>"><?php echo htmlspecialchars($category->name); ?></div>
-    <?php endforeach; ?>
-</div>
+<div class="category_list_container" id="category_list"></div>
 
 <!-- 게시글 랜더링 -->
 <div id="post_list">
@@ -44,5 +39,6 @@
     window.totalCount = <?php echo $total_count; ?>;
     window.fetchPostsUrl = "<?php echo base_url('main/fetch_posts'); ?>";
     window.keyword = "<?= isset($keyword) ? htmlspecialchars($keyword) : '' ?>";
+    window.categoryList = <?= json_encode($categories) ?>;
 </script>
 

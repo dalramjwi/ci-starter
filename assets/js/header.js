@@ -2,6 +2,10 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentPage = window.currentPage;
   let currentLimit = window.currentLimit;
   const totalCount = window.totalCount;
+  const categoryListContent = window.categoryList;
+  const fetchPostsUrl = window.fetchPostsUrl;
+
+  let currentCategoryId = 0; // 기본은 전체
 
   const postList = document.getElementById("post_list");
   const pageOption = document.getElementById("page_option");
@@ -11,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const closeBtn = document.querySelector(".reply-close-btn");
   const commentForm = document.querySelector(".comment-form");
   const editButtons = document.querySelectorAll(".btn-edit");
+  const categoryList = document.getElementById("category_list");
 
   // 모달 열기
   openBtn?.addEventListener("click", function () {
@@ -28,6 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
       modal.style.display = "none";
     }
   });
+
   // 댓글 비동기 작성 처리
   if (commentForm) {
     commentForm.addEventListener("submit", function (e) {
@@ -54,6 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     });
   }
+
   // 댓글 수정 인라인 처리
   editButtons.forEach((button) => {
     button.addEventListener("click", function (e) {
@@ -63,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const contentSpan = li.querySelector(".comment-content");
       const originalContent = contentSpan.textContent.trim();
 
-      if (li.querySelector("textarea")) return; // 이미 수정 모드면 무시
+      if (li.querySelector("textarea")) return;
 
       // 기존 내용 숨김
       contentSpan.style.display = "none";
@@ -175,13 +182,14 @@ document.addEventListener("DOMContentLoaded", function () {
     const bodyData = {
       page_option: limit,
       page: page,
+      category_id: currentCategoryId,
     };
 
     if (window.keyword) {
       bodyData.keyword = window.keyword;
     }
 
-    fetch(window.fetchPostsUrl, {
+    fetch(fetchPostsUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(bodyData),
@@ -195,6 +203,35 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .catch(() => alert("게시글을 불러오는 중 오류가 발생했습니다."));
   }
+
+  // 카테고리 리스트 생성
+  function renderCategoryList(categories) {
+    categoryList.innerHTML = "";
+
+    const allBtn = document.createElement("div");
+    allBtn.className = "category_0";
+    allBtn.textContent = "전체 게시판";
+    allBtn.dataset.categoryId = 0;
+    categoryList.appendChild(allBtn);
+
+    categories.forEach((cat) => {
+      const btn = document.createElement("div");
+      btn.className = `category_btn${cat.category_id}`;
+      btn.textContent = cat.name;
+      btn.dataset.categoryId = cat.category_id;
+      categoryList.appendChild(btn);
+    });
+  }
+
+  // 카테고리 클릭 이벤트 처리
+  categoryList.addEventListener("click", function (e) {
+    if (e.target && e.target.dataset.categoryId !== undefined) {
+      currentCategoryId = parseInt(e.target.dataset.categoryId);
+      fetchPosts(1, currentLimit); // 선택된 카테고리로 게시글 다시 불러오기
+    }
+  });
+
+  renderCategoryList(categoryListContent);
 
   pageOption.addEventListener("change", function () {
     currentLimit = parseInt(this.value);

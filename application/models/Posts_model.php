@@ -1,15 +1,19 @@
 <?php 
 class Posts_model extends CI_Model {
 
-    public function get_posts($offset, $limit, $keyword = null)
+    public function get_posts($offset, $limit, $filters = [])
     {
         $this->db
             ->select('posts.*, path.path')
             ->from('posts')
             ->join('path', 'posts.post_id = path.post_id');
 
-        if (!empty($keyword)) {
-            $this->db->like('posts.title', trim($keyword));
+        if (!empty($filters['keyword'])) {
+            $this->db->like('posts.title', trim($filters['keyword']));
+        }
+
+        if (!empty($filters['category_id']) && $filters['category_id'] != 0) {
+            $this->db->where('posts.category_id', (int)$filters['category_id']);
         }
 
         return $this->db
@@ -19,16 +23,17 @@ class Posts_model extends CI_Model {
             ->get()
             ->result();
     }
-    public function search_count($keyword) 
+    public function count_posts($filters = [])
     {
-        $keyword = trim($keyword);
-        if ($keyword === '') {
-            return 0;
+        if (!empty($filters['keyword'])) {
+            $this->db->like('title', trim($filters['keyword']));
         }
 
-        return $this->db
-            ->like('title', $keyword)
-            ->count_all_results('posts');
+        if (!empty($filters['category_id']) && $filters['category_id'] != 0) {
+            $this->db->where('category_id', (int)$filters['category_id']);
+        }
+
+        return $this->db->count_all_results('posts');
     }
     // 전체 게시글 개수 구하기
     public function get_total_count()
@@ -89,6 +94,7 @@ public function get_descendants($post_id)
     $query = $this->db->get();
     return $query->result();
 }
+
 
 }
 

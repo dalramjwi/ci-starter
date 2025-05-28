@@ -18,15 +18,26 @@ class Main extends MY_Controller
         $this->load->helper('utility_helper');
     }
     // 게시글 데이터를 준비하는 메서드
-    private function prepare_post_data($offset, $limit, $keyword = null)
+
+    private function prepare_post_data($offset, $limit, $keyword = null, $category_id = 0)
     {
-        $posts = $this->Posts_model->get_posts($offset, $limit, $keyword);
-        $total = $keyword ? $this->Posts_model->search_count($keyword) : $this->Posts_model->get_total_count();
+        $filters = [];
+
+        if (!empty($keyword)) {
+            $filters['keyword'] = $keyword;
+        }
+
+        if ($category_id !== 0) {
+            $filters['category_id'] = $category_id;
+        }
+
+        $posts = $this->Posts_model->get_posts($offset, $limit, $filters);
+        $total = $this->Posts_model->count_posts($filters);
 
         return [
             'posts' => $posts,
-            'total_count' => $total,
             'total_pages' => ceil($total / $limit),
+            'total_count' => $total,
         ];
     }
 
@@ -69,22 +80,24 @@ class Main extends MY_Controller
     public function fetch_posts()
     {
         $input = json_decode(file_get_contents('php://input'), true);
+
         $limit = isset($input['page_option']) ? (int)$input['page_option'] : 10;
         $page = isset($input['page']) ? (int)$input['page'] : 1;
         $offset = ($page - 1) * $limit;
         $keyword = isset($input['keyword']) ? trim($input['keyword']) : null;
+        $category_id = isset($input['category_id']) ? (int)$input['category_id'] : 0;
 
-        $result = $this->prepare_post_data($offset, $limit, $keyword);
+        $result = $this->prepare_post_data($offset, $limit, $keyword, $category_id);
 
         $html = $this->load->view('main/post_list', ['posts' => $result['posts']], true);
 
-        // JSON으로 응답
         echo json_encode([
             'html' => $html,
             'total_pages' => $result['total_pages'],
             'current_page' => $page,
         ]);
     }
+
     /**
      * 게시글 CRUD 기능
      */
