@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const totalCount = window.totalCount;
   const categoryListContent = window.categoryList;
   const fetchPostsUrl = window.fetchPostsUrl;
-
+  let isLogin = window.isLogin;
   let currentCategoryId = 2; // 기본은 자유
 
   const postList = document.getElementById("post_list");
@@ -213,6 +213,11 @@ document.addEventListener("DOMContentLoaded", function () {
       btn.className = `category_btn${cat.category_id}`;
       btn.textContent = cat.name;
       btn.dataset.categoryId = cat.category_id;
+
+      if (isLogin === "none" && cat.category_id == 4) {
+        return;
+      }
+
       categoryList.appendChild(btn);
     });
   }

@@ -27,9 +27,10 @@
 <div class="category_list_container" id="category_list"></div>
 
 <!-- 게시글 랜더링 -->
-<div id="post_list">
-    <?php $this->load->view('main/post_list', ['posts' => $posts]); ?>
-</div>
+    <div id="post_list">
+        <?php $this->load->view('main/post_list', ['posts' => $posts]); ?>
+    </div>
+
 <!-- 페이지 표시 랜더링 -->
 <div id="pagination"></div>
 
@@ -40,5 +41,6 @@
     window.fetchPostsUrl = "<?php echo base_url('main/fetch_posts'); ?>";
     window.keyword = "<?= isset($keyword) ? htmlspecialchars($keyword) : '' ?>";
     window.categoryList = <?= json_encode($categories) ?>;
-</script>
+    window.isLogin = "<?php echo $this->session->userdata('user_id') ?? 'none'; ?>";
+ </script>
 
