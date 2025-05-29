@@ -25,9 +25,6 @@ class Sign_up extends MY_Controller
         if ($result['success']) {
             redirect('/login/index');
         } else {
-            $this->session->set_flashdata('message', $result['message']);
-            // echo "<script>alert('{$result['message']}'); location.href = '" . base_url('sign_up') . "';</script>";
-            // exit;
             redirect('/sign_up/index');
 
         }

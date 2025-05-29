@@ -1,3 +1,4 @@
+<?php $this->load->view('common/toast'); ?>
 <div class="write_div">
     <?php if ($this->session->userdata('user_id')): ?>
     <a href="<?php echo base_url('write'); ?>" class="write_btn">

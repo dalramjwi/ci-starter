@@ -25,14 +25,13 @@ class Login extends MY_Controller
         if ($result['success']) {
             redirect('/main');
         } else {
-            echo "<script>alert('{$result['message']}'); location.href = '" . base_url('login') . "';</script>";
-            exit;
+            redirect('/login/index');
         }
     }
 
     public function logout()
     {
         $this->authservice->logout();
-        redirect('/login');
+        redirect('/main/index');
     }
 }

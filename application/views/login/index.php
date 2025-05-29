@@ -1,3 +1,5 @@
+<?php $this->load->view('common/toast'); ?>
+
 <p class = "title"><?php echo $login; ?></p>
 <div class="login-form">
     <form action="<?php echo base_url('login/submit'); ?>" method="post">
