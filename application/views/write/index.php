@@ -1,3 +1,5 @@
+<?php $this->load->view('common/toast'); ?>
+
 <div class="write_container">
     <form id="write_form" action="<?php echo base_url('write/wrote'); ?>" method="post" class="write_form">
         <label>카테고리:</label>
