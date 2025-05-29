@@ -20,7 +20,7 @@ class Sign_up extends MY_Controller
         $user_id = $this->input->post('user_id');
         $user_pw = $this->input->post('user_pw');
 
-        $result = $this->authservice->signup($user_id, $user_pw);
+        $result = $this->authservice->sign_up($user_id, $user_pw);
 
         if ($result['success']) {
             redirect('/login/index');

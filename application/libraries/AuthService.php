@@ -20,7 +20,7 @@ class AuthService
         }
 
         if ($user->user_pw !== $user_pw) {
-            return ['success' => false, 'message' => '비밀번호가 틀렸습니다.'];
+            return ['success' => false, 'message' => '비밀번호가 일치하지 않습니다.'];
         }
 
         $this->CI->session->set_userdata('user_id', $user->user_id);
@@ -35,7 +35,7 @@ class AuthService
     }
 
     // 회원가입 처리
-    public function signup($user_id, $user_pw)
+    public function sign_up($user_id, $user_pw)
     {
         $exists = $this->CI->Users_model->get_by_user_id($user_id);
         if ($exists) {
