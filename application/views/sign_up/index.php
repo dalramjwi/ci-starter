@@ -1,4 +1,7 @@
+<?php $this->load->view('common/toast'); ?>
+
 <p class = "title"><?php echo $sign_up; ?></p>
+
 <div class="login-form">
 
     <form action="<?php echo base_url('sign_up/submit'); ?>" method="post">
