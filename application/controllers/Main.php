@@ -58,54 +58,6 @@ class Main extends MY_Controller
         $data['category_id'] = 2;
         $this->render('main/index', $data);
     }
-    // 게시글 검색
-    public function search() 
-    {
-        $keyword = trim($this->input->get('q'));
-        $page = $this->input->get('page') ?? 1;
-        $limit = 10;
-        $offset = ($page - 1) * $limit;
-        $categories = $this->Categories_model->get_all_categories();
-
-        $data = ($keyword === '')
-        ? ['posts' => [], 'total_pages' => 0, 'total_count' => 0]
-        : $this->prepare_post_data($offset, $limit, $keyword);
-        
-        $data['categories'] = $categories;
-        $data['limit'] = $limit;
-        $data['current_page'] = $page;
-        $data['keyword'] = $keyword;
-        $data['category_id'] = 2;
-
-
-        $this->render('main/index', $data);
-    }
-    // 게시글 목록을 AJAX로 불러오는 메서드
-    public function fetch_posts()
-    {
-        $input = json_decode(file_get_contents('php://input'), true);
-
-        $limit = isset($input['page_option']) ? (int)$input['page_option'] : 10;
-        $page = isset($input['page']) ? (int)$input['page'] : 1;
-        $offset = ($page - 1) * $limit;
-        $keyword = isset($input['keyword']) ? trim($input['keyword']) : null;
-        $category_id = isset($input['category_id']) ? (int)$input['category_id'] : 2;
-
-        $result = $this->prepare_post_data($offset, $limit, $keyword, $category_id);
-
-        $html = $this->load->view('main/post_list', ['posts' => $result['posts']], true);
-        $html = $this->load->view('main/post_list', [
-            'posts' => $result['posts'],
-            'category_id' => $category_id
-        ], true);
-
-        echo json_encode([
-            'html' => $html,
-            'total_pages' => $result['total_pages'],
-            'current_page' => $page
-        ]);
-    }
-
     /**
      * 게시글 CRUD 기능
      */
