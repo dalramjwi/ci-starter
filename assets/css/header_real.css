@@ -1,0 +1,115 @@
+/* 공통 설정 */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* header 기본 스타일 */
+header {
+  background-color: rgba(209, 213, 231, 0.62);
+  padding: 15px 20px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+.header-left {
+  font-size: 20px;
+  font-weight: bold;
+  position: relative;
+  display: inline-block;
+}
+
+.header-right a {
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.header-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 63px;
+  width: 66px;
+}
+
+/* 지구 스핀 애니메이션 */
+@keyframes axis-spin {
+  from {
+    transform: translateX(0px);
+  }
+  to {
+    transform: translateX(-123px);
+  }
+}
+
+.countries-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  position: absolute;
+  height: 96%;
+  width: 96%;
+  border-radius: 100px;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.countries {
+  position: absolute;
+  animation: axis-spin 5s steps(24) infinite;
+}
+
+.header-container:hover {
+  filter: drop-shadow(-1px -1px 2px #ff409c) drop-shadow(1px 1px 2px #3b2bff);
+  z-index: 10000;
+}
+
+/* cloud 중앙 배치용 wrapper */
+.cloud-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/* cloud 자체 스타일 */
+.cloud {
+  position: relative;
+  width: 105px;
+  height: 30px;
+  top: 0;
+}
+
+.puffs {
+  animation: cloud 4s infinite;
+  border-radius: 50%;
+  background: #f0f8ff; /* 알록달록한 흰색 대신 밝은 하늘색 계열 */
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  box-shadow:
+    25px 0 #f0f8ff,
+    50px 0 #f0f8ff,
+    75px 0 #f0f8ff,
+    12.5px -7.5px #dceeff,
+    37.5px -7.5px #dceeff,
+    62.5px -7.5px #dceeff,
+    12.5px 7.5px #dceeff,
+    37.5px 7.5px #dceeff,
+    62.5px 7.5px #dceeff,
+    25px -15px #c9e5f5,
+    50px -15px #c9e5f5,
+    25px 15px #c9e5f5,
+    50px 15px #c9e5f5;
+}
+
+#cloud_target {
+  text-decoration: none;
+  color: white;
+}

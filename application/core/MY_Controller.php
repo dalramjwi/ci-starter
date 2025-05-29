@@ -106,7 +106,7 @@ class MY_Controller extends CI_Controller
     {
         $aVars = array(
             'company_name' => '예람',
-            'site_name' => 'ㅎ.ㅎ',
+            'site_name' => '게시판 페이지',
             'writepagename' => '글쓰기 페이지',
             'login' => '로그인',
             'logout' => '로그아웃',
