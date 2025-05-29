@@ -81,8 +81,8 @@ class WriteService
 
         $path = base62_encode($insert_id);
         $this->CI->Path_model->insert($insert_id, $path);
-
-        return ['success' => true];
+//! insert_id는 test 코드 용으로 쓰임
+        return ['success' => true, 'insert_id' => $insert_id];
     }
     /**
      * 답글 게시글 작성 처리
@@ -138,6 +138,6 @@ class WriteService
         $path = $parent_path . '/' . base62_encode($insert_id);
         $this->CI->Path_model->insert($insert_id, $path);
 
-        return ['success' => true];
+        return ['success' => true, 'insert_id' => $insert_id];
     }
 }
