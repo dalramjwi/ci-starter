@@ -23,8 +23,8 @@
     <?php } ?>
         <?php if ($this->session->userdata('user_id') == $post->user_id): ?>
             <div class="post-actions">
-                <a href="<?php echo base_url('main/edit/' . $post->post_id); ?>" class="post-btn-edit">수정</a>
-                <a href="<?php echo base_url('main/delete/' . $post->post_id); ?>" class="post-btn-delete">삭제</a>
+                <a href="<?php echo base_url('post/edit/' . $post->post_id); ?>" class="post-btn-edit">수정</a>
+                <a href="<?php echo base_url('post/delete/' . $post->post_id); ?>" class="post-btn-delete">삭제</a>
             </div>
         <?php endif; ?>
     </div>
@@ -46,7 +46,7 @@
 
 <!-- 댓글 필드 -->
 <?php if ($this->session->userdata('user_id')): ?>
-<form action="<?php echo base_url('main/comments/' . $post->post_id); ?>" method="post" class="comment-form">
+<form action="<?php echo base_url('comment/comments/' . $post->post_id); ?>" method="post" class="comment-form">
     <div class="comment-field">
         <label for="comment">댓글:</label>
         <textarea name="comment" id="comment" required></textarea>
@@ -66,8 +66,8 @@
                     <span class="comment-content"><?php echo nl2br(htmlspecialchars($comment->content)); ?></span>
                     <span class="comment-date"><?php echo $comment->created_at; ?></span>
                     <?php if ($this->session->userdata('user_id') == $comment->user_id): ?>
-                        <a href="<?php echo base_url('main/edit_comment/' . $comment->comment_id); ?>" class="btn-edit">수정</a>
-                        <a href="<?php echo base_url('main/delete_comment/' . $comment->comment_id); ?>" class="btn-delete">삭제</a>
+                        <a href="<?php echo base_url('comment/edit_comment/' . $comment->comment_id); ?>" class="btn-edit">수정</a>
+                        <a href="<?php echo base_url('comment/delete_comment/' . $comment->comment_id); ?>" class="btn-delete">삭제</a>
                     <?php endif; ?>
                 </li>
             <?php endforeach; ?>
