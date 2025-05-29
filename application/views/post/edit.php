@@ -1,5 +1,5 @@
 
-<form method="post" action="<?php echo base_url('main/update/' . $post->post_id); ?>">
+<form method="post" action="<?php echo base_url('post/update/' . $post->post_id); ?>">
 
         <p>게시물 수정</p>
         <label for="title">제목</label><br>
