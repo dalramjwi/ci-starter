@@ -1,10 +1,3 @@
-/* 공통 설정 */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
 /* header 기본 스타일 */
 header {
   background-color: rgba(209, 213, 231, 0.62);
@@ -114,92 +107,35 @@ header {
   color: white;
 }
 
-.screen:after,
-.screen:before {
+.for-checkbox {
+  display: block;
+  width: 30px;
+  height: 30px;
+  position: relative;
+  border: 15px solid #534849;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.for-checkbox::after {
   content: "";
   display: block;
-  height: 100%;
   position: absolute;
-  width: 100%;
+  background: #bebfd8;
+  top: -5.5px;
+  right: -7.5px;
+  bottom: -5.5px;
+  left: -7.5px;
+  border-radius: 5px;
+  animation: glow 0.1s linear 0s infinite alternate;
+  box-shadow: inset 0px 0px 20px 2px rgba(0, 0, 0, 0.5);
 }
 
-.screen,
-.screen:after,
-.screen:before {
-  background-image:
-    linear-gradient(
-      90deg,
-      #b0d4ec 0,
-      #b0d4ec 17%,
-      #ffffff 17%,
-      #ffffff 34%,
-      #b89edf 34%,
-      #b89edf 51%,
-      #cccccc 51%,
-      #cccccc 70%,
-      #bbbbbb 70%,
-      #bbbbbb 75%,
-      #cccccc 75%,
-      #cccccc 79%,
-      #c8c8c8 79%,
-      #c8c8c8 84%,
-      #cccccc 84%,
-      #cccccc 100%
-    ),
-    linear-gradient(
-      90deg,
-      #91cdff 0,
-      #91cdff 14%,
-      #cccccc 14%,
-      #cccccc 28%,
-      #ff9edf 28%,
-      #ff9edf 42%,
-      #cccccc 42%,
-      #cccccc 56%,
-      #7ff1f1 56%,
-      #7ff1f1 70%,
-      #cccccc 70%,
-      #cccccc 84%,
-      #e4e4e4 84%,
-      #e4e4e4 100%
-    ),
-    linear-gradient(
-      90deg,
-      #e4e4e4 0,
-      #e4e4e4 14%,
-      #ffff99 14%,
-      #ffff99 28%,
-      #7ff1f1 28%,
-      #7ff1f1 42%,
-      #99f199 42%,
-      #99f199 56%,
-      #ff9edf 56%,
-      #ff9edf 70%,
-      #ff9999 70%,
-      #ff9999 84%,
-      #91cdff 84%,
-      #91cdff 100%
-    );
-
-  background-position:
-    50% 43px,
-    50% 34px,
-    50% 0;
-  background-repeat: repeat-x;
-  background-size: 100px 50px;
-  border: 2px solid #00000061;
-  border-radius: 6px;
-}
-
-.screen {
-  border: 1px solid black;
-  height: 50px;
-  left: 50%;
-  opacity: 1;
-  overflow: hidden;
-  position: absolute;
+.for-checkbox .checkmark.style-1 {
   top: 50%;
-  transform: translate(-50%, -50%);
-  width: 100px;
-  z-index: 1;
+  right: 50%;
+  left: 50%;
+  bottom: 50%;
+  border-radius: 50%;
+  transition: all 0.3s ease;
 }

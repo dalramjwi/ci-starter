@@ -10,7 +10,16 @@
 
 
 <header>
-     <a href="<?php echo base_url('/main')?>">
+    <a href="<?php echo base_url('/start')?>" id="cloud_target">
+        <div>
+            <div class="container">
+                        <div class="for-checkbox">
+                            <div class="checkmark_style-1"></div>
+                        </div>
+            </div>
+        </div>
+    </a>     
+    <a href="<?php echo base_url('/main')?>">
         <div class="header-container">
             <div class="header-left">
 
@@ -36,11 +45,6 @@
                 </div>
                 <svg class="globe" width="66" height="63" viewBox="0 0 66 63" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M30 0H27H24V3H21H18H15V6H12V9H9V12H6V15H3V18V21H0V24V27V30V33V36V39V42H3V45L3 48H6L6 51H9V54H12V57H15V60H18H21H24V63H27H30H33H36H39H42V60H45H48H51V57H54V54H57V51H60V48H63V45V42H66V39V36V33V30V27V24V21H63V18V15H60V12H57V9H54V6H51V3H48H45H42V0H39H36H33H30ZM42 3V6H45H48H51V9H54V12V15H57H60V18V21H63V24V27V30V33V36V39V42H60V45V48H57H54V51H51V54V57H48H45H42V60H39H36H33H30H27H24V57H21H18H15V54V51H12V48H9H6V45V42H3L3 39V36V33V30V27V24V21H6V18H9V15V12H12V9H15V6H18H21H24V3H27H30H33H36H39H42Z" fill="white"/></svg>
-        </div>
-    </a>
-    <a href="<?php echo base_url('/start')?>" id="cloud_target">
-        <div>
-            <div class="screen"></div>
         </div>
     </a>
     <div class="header-right">
