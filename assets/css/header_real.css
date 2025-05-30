@@ -1,6 +1,6 @@
 /* header 기본 스타일 */
 header {
-  background-color: rgba(209, 213, 231, 0.62);
+  background-color: #f2e9dc;
   padding: 15px 20px;
   border-bottom: 1px solid #ddd;
   display: flex;
@@ -138,4 +138,10 @@ header {
   bottom: 50%;
   border-radius: 50%;
   transition: all 0.3s ease;
+}
+.header-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
