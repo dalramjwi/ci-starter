@@ -40,16 +40,7 @@
     </a>
     <a href="<?php echo base_url('/start')?>" id="cloud_target">
         <div>
-            <div class="cloud">
-            <div class="puffs"></div>
-            <div class="rain">
-                <div class="drop"></div>
-                <div class="drop"></div>
-                <div class="drop"></div>
-                <div class="drop"></div>
-                <div class="drop"></div>
-            </div>
-            </div>
+            <div class="screen"></div>
         </div>
     </a>
     <div class="header-right">
