@@ -218,18 +218,48 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
+      // 기본 선택된 카테고리 예시: category_id === 2
+      if (cat.category_id == 2) {
+        applySelectedStyle(btn);
+        currentCategoryId = 1;
+      }
+
       categoryList.appendChild(btn);
+    });
+  }
+
+  // 스타일 적용 함수
+  function applySelectedStyle(element) {
+    element.style.backgroundColor = "#3498db";
+    element.style.color = "white";
+    element.style.fontWeight = "bold";
+    element.style.borderRadius = "5px";
+    element.style.padding = "5px 10px";
+  }
+
+  // 스타일 초기화 함수
+  function resetAllCategoryStyles() {
+    const buttons = categoryList.querySelectorAll("div");
+    buttons.forEach((btn) => {
+      btn.style.backgroundColor = "";
+      btn.style.color = "";
+      btn.style.fontWeight = "";
+      btn.style.borderRadius = "";
+      btn.style.padding = "";
     });
   }
 
   // 카테고리 클릭 이벤트 처리
   categoryList.addEventListener("click", function (e) {
     if (e.target && e.target.dataset.categoryId !== undefined) {
+      resetAllCategoryStyles(); // 기존 스타일 초기화
+      applySelectedStyle(e.target); // 선택된 버튼 스타일 적용
       currentCategoryId = parseInt(e.target.dataset.categoryId);
-      fetchPosts(1, currentLimit); // 선택된 카테고리로 게시글 다시 불러오기
+      fetchPosts(1, currentLimit); // 해당 카테고리 게시글 불러오기
     }
   });
 
+  // 초기 카테고리 목록 렌더링
   renderCategoryList(categoryListContent);
 
   pageOption.addEventListener("change", function () {
