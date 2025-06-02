@@ -230,11 +230,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 스타일 적용 함수
   function applySelectedStyle(element) {
-    element.style.backgroundColor = "#3498db";
+    element.style.backgroundColor = "#2a72d6";
     element.style.color = "white";
-    element.style.fontWeight = "bold";
+    // element.style.fontWeight = "bold";
     element.style.borderRadius = "5px";
-    element.style.padding = "5px 10px";
+    element.style.padding = "10px 20px";
   }
 
   // 스타일 초기화 함수
