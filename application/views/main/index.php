@@ -19,7 +19,7 @@
 </div>
 <!-- 검색 필드 -->
  <div class="search_div">
-     <form id="searchForm" method="get" action="<?php echo base_url('postlist/search'); ?>">
+     <form id="searchForm" method="get" action="<?php echo base_url('main/search'); ?>">
          <input type="text" name="q" placeholder="검색어 입력" value="<?php echo htmlspecialchars($keyword ?? ''); ?>">
          <button type="submit">검색</button>
      </form>
@@ -39,7 +39,7 @@
     window.currentPage = <?php echo $current_page; ?>;
     window.currentLimit = <?php echo $limit; ?>;
     window.totalCount = <?php echo $total_count; ?>;
-    window.fetchPostsUrl = "<?php echo base_url('postlist/fetch_posts'); ?>";
+    window.fetchPostsUrl = "<?php echo base_url('main/fetch_posts'); ?>";
     window.keyword = "<?= isset($keyword) ? htmlspecialchars($keyword) : '' ?>";
     window.categoryList = <?= json_encode($categories) ?>;
     window.isLogin = "<?php echo $this->session->userdata('user_id') ?? 'none'; ?>";
