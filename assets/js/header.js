@@ -221,7 +221,6 @@ document.addEventListener("DOMContentLoaded", function () {
       // 기본 선택된 카테고리 예시: category_id === 2
       if (cat.category_id == 2) {
         applySelectedStyle(btn);
-        currentCategoryId = 1;
       }
 
       categoryList.appendChild(btn);

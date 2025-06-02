@@ -73,6 +73,7 @@ class MainService
         }
 
         $posts = $this->CI->Posts_model->get_posts($offset, $limit, $filters);
+        // log_message('debug', '쿼리 확인: ' . $this->CI->db->last_query());
         $total = $this->CI->Posts_model->count_posts($filters);
 
         return [
