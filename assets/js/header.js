@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
   const commentForm = document.querySelector(".comment-form");
   const editButtons = document.querySelectorAll(".btn-edit");
   const categoryList = document.getElementById("category_list");
+  const btnEdit = document.querySelector(".btn-edit");
+  const btnDelete = document.querySelector(".btn-delete");
 
   // 모달 열기
   openBtn?.addEventListener("click", function () {
@@ -120,7 +122,6 @@ document.addEventListener("DOMContentLoaded", function () {
               // 성공 시 댓글 내용 업데이트 (줄바꿈 처리)
               contentSpan.innerHTML = newContent.replace(/\n/g, "<br>");
               contentSpan.style.display = "inline";
-
               textarea.remove();
               saveBtn.remove();
               cancelBtn.remove();
