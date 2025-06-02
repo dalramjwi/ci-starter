@@ -1,35 +1,33 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
-
+/**
+ * 게시글 보기/수정/삭제 기능 컨트롤러
+ *
+ * 주요 역할:
+ * - URL 요청 처리
+ * - PostService 호출
+ * - 뷰 렌더링
+ */
 class Post extends MY_Controller
 {
     public function __construct()
     {
         parent::__construct();
         $this->setCommonVars();
-        $this->load->model('Posts_model');
-        $this->load->model('Comments_model');
-        $this->load->model('Categories_model');
+        $this->load->library('PostService');
     }
 
     // 게시글 상세 보기
     public function view($post_id)
     {
-        $post = $this->Posts_model->get_post($post_id);
-        $data['post'] = $post;
-        $data['comments'] = $this->Comments_model->get_comments_by_post($post_id);
-
-        if ($post) {
-            $data['category'] = $this->Categories_model->get_category($post->category_id);
-        }
-
+        $data = $this->postservice->get_post_detail($post_id);
         $this->render('post/view', $data);
     }
 
-    // 게시글 수정 폼
+    // 게시글 수정 폼 보기
     public function edit($post_id)
     {
-        $data['post'] = $this->Posts_model->get_post($post_id);
+        $data['post'] = $this->postservice->get_post($post_id);
         $this->render('post/edit', $data);
     }
 
@@ -39,14 +37,7 @@ class Post extends MY_Controller
         $title = $this->input->post('title');
         $content = $this->input->post('content');
 
-        $data = [
-            'title' => $title,
-            'content' => $content,
-            'updated_at' => date('Y-m-d H:i:s')
-        ];
-
-        $this->Posts_model->update_post($post_id, $data);
-
+        $this->postservice->update_post($post_id, $title, $content);
         redirect('/post/view/' . $post_id);
     }
 
@@ -85,6 +76,14 @@ class Post extends MY_Controller
         $this->Posts_model->delete_post($post_id);
         echo "<script>
             alert('게시글이 삭제되었습니다.');
+            location.href = '" . base_url('main') . "';
+        </script>";
+    }
+        public function delete_confirm($post_id)
+    {
+        $this->postservice->delete_post_with_descendants($post_id);
+        echo "<script>
+            alert('게시글과 자식 글이 모두 삭제되었습니다.');
             location.href = '" . base_url('main') . "';
         </script>";
     }

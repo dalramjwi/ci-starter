@@ -15,10 +15,10 @@ class Posts_closure_model extends CI_Model
     }
 
     // // 특정 조상으로부터 모든 후손 가져오기
-    // public function get_descendants($ancestor)
-    // {
-    //     return $this->db->get_where('posts_closure', ['ancestor' => $ancestor])->result_array();
-    // }
+    public function get_descendants($ancestor)
+    {
+        return $this->db->get_where('posts_closure', ['ancestor' => $ancestor])->result();
+    }
 
     // // 특정 후손의 모든 조상 가져오기
     // public function get_ancestors($descendant)
